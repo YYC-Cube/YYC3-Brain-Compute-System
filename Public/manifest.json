@@ -1,0 +1,30 @@
+{
+  "name": "YYC³ Brain Computer System",
+  "short_name": "YYC³ BCS",
+  "description": "本地闭环DevOps智能管理平台",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1c",
+  "theme_color": "#06b6d4",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/yyc3-icons/Web%20App/android-chrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/yyc3-icons/Web%20App/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/yyc3-icons/Web%20App/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["business", "developerTools", "utilities"],
+  "lang": "zh-CN"
+}

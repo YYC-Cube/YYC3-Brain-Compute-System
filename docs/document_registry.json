@@ -1,0 +1,465 @@
+{
+  "export_time": "2026-05-19T02:34:51.963819",
+  "project": "Brain Computer System",
+  "total_documents": 24,
+  "documents": {
+    "001-BCS-项目规划-项目章程与愿景.md": {
+      "file_name": "001-BCS-项目规划-项目章程与愿景.md",
+      "description": "项目立项核心依据",
+      "version": "v3.1.0",
+      "checksum": "46d4be843059621f",
+      "tags": [
+        "规划",
+        "章程"
+      ],
+      "related_docs": []
+    },
+    "002-BCS-项目规划-项目范围说明书.md": {
+      "file_name": "002-BCS-项目规划-项目范围说明书.md",
+      "description": "项目范围边界定义",
+      "version": "v3.1.0",
+      "checksum": "55fde70f41c5b728",
+      "tags": [
+        "范围",
+        "规划"
+      ],
+      "related_docs": []
+    },
+    "003-BCS-项目规划-项目里程碑计划.md": {
+      "file_name": "003-BCS-项目规划-项目里程碑计划.md",
+      "description": "阶段里程碑与任务拆解",
+      "version": "v3.1.0",
+      "checksum": "8f230d7c16480fc7",
+      "tags": [
+        "里程碑",
+        "规划"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-需求规划-业务需求分析.md": {
+      "file_name": "001-BCS-需求规划-业务需求分析.md",
+      "description": "脑机系统核心业务需求梳理",
+      "version": "v3.1.0",
+      "checksum": "a19a903deef39345",
+      "tags": [
+        "需求",
+        "业务"
+      ],
+      "related_docs": []
+    },
+    "002-BCS-需求规划-产品需求文档.md": {
+      "file_name": "002-BCS-需求规划-产品需求文档.md",
+      "description": "功能规格与验收标准",
+      "version": "v3.1.0",
+      "checksum": "53198512a291d934",
+      "tags": [
+        "需求",
+        "PRD"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-可行性分析-技术可行性分析.md": {
+      "file_name": "001-BCS-可行性分析-技术可行性分析.md",
+      "description": "技术风险评估",
+      "version": "v3.1.0",
+      "checksum": "1b6b75900a09b057",
+      "tags": [
+        "可行性",
+        "技术"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-风险管理-项目风险评估.md": {
+      "file_name": "001-BCS-风险管理-项目风险评估.md",
+      "description": "全周期风险识别",
+      "version": "v3.1.0",
+      "checksum": "2d65750e98eb1829",
+      "tags": [
+        "风险",
+        "评估"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-架构设计-系统架构总览图.md": {
+      "file_name": "001-BCS-架构设计-系统架构总览图.md",
+      "description": "脑机系统整体架构视图",
+      "version": "v3.1.0",
+      "checksum": "243b01564ef1c34f",
+      "tags": [
+        "架构",
+        "设计"
+      ],
+      "related_docs": []
+    },
+    "002-BCS-架构设计-九层功能架构设计.md": {
+      "file_name": "002-BCS-架构设计-九层功能架构设计.md",
+      "description": "分层架构设计",
+      "version": "v3.1.0",
+      "checksum": "ea50a22738bd8466",
+      "tags": [
+        "架构",
+        "分层"
+      ],
+      "related_docs": []
+    },
+    "003-BCS-架构设计-技术选型论证报告.md": {
+      "file_name": "003-BCS-架构设计-技术选型论证报告.md",
+      "description": "React+Vite+TailwindCSS技术栈选型依据",
+      "version": "v3.1.0",
+      "checksum": "4a35383944277821",
+      "tags": [
+        "技术选型",
+        "论证"
+      ],
+      "related_docs": []
+    },
+    "004-BCS-架构设计-DevOps架构设计.md": {
+      "file_name": "004-BCS-架构设计-DevOps架构设计.md",
+      "description": "DevOps模块架构设计",
+      "version": "v3.1.0",
+      "checksum": "99965159edbf2ae5",
+      "tags": [
+        "DevOps",
+        "架构"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-详细设计-API层设计.md": {
+      "file_name": "001-BCS-详细设计-API层设计.md",
+      "description": "8层API架构设计(client/config/types/endpoints/hooks/mock/websocket)",
+      "version": "v3.1.0",
+      "checksum": "2dd11c9d5e8fa2e9",
+      "tags": [
+        "API",
+        "设计"
+      ],
+      "related_docs": []
+    },
+    "002-BCS-详细设计-组件体系设计.md": {
+      "file_name": "002-BCS-详细设计-组件体系设计.md",
+      "description": "shadcn/ui+Radix UI组件体系设计",
+      "version": "v3.1.0",
+      "checksum": "81c118b9c19a2bc9",
+      "tags": [
+        "组件",
+        "UI"
+      ],
+      "related_docs": []
+    },
+    "003-BCS-详细设计-主题系统设计.md": {
+      "file_name": "003-BCS-详细设计-主题系统设计.md",
+      "description": "自定义主题系统v2设计",
+      "version": "v3.1.0",
+      "checksum": "f386b66cfb3ad544",
+      "tags": [
+        "主题",
+        "设计"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-开发环境-开发环境搭建指南.md": {
+      "file_name": "001-BCS-开发环境-开发环境搭建指南.md",
+      "description": "React+Vite环境配置说明",
+      "version": "v3.1.0",
+      "checksum": "efb5e8fedeaca8b8",
+      "tags": [
+        "环境",
+        "搭建"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-开发规范-Git工作流规范.md": {
+      "file_name": "001-BCS-开发规范-Git工作流规范.md",
+      "description": "分支管理策略",
+      "version": "v3.1.0",
+      "checksum": "e99e64811d14fe28",
+      "tags": [
+        "Git",
+        "规范"
+      ],
+      "related_docs": []
+    },
+    "002-BCS-开发规范-代码提交规范.md": {
+      "file_name": "002-BCS-开发规范-代码提交规范.md",
+      "description": "Conventional Commits提交信息格式",
+      "version": "v3.1.0",
+      "checksum": "a088dfc56eceefe4",
+      "tags": [
+        "提交",
+        "规范"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-测试策略-测试策略总纲.md": {
+      "file_name": "001-BCS-测试策略-测试策略总纲.md",
+      "description": "Vitest+React Testing Library测试方案",
+      "version": "v3.1.0",
+      "checksum": "6b1faf8b2af199d1",
+      "tags": [
+        "测试",
+        "策略"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-质量审核-代码质量审核标准.md": {
+      "file_name": "001-BCS-质量审核-代码质量审核标准.md",
+      "description": "ESLint+TypeScript Strict质量度量",
+      "version": "v3.1.0",
+      "checksum": "fce27ec0196fc555",
+      "tags": [
+        "质量",
+        "审核"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-交付物管理-交付物清单.md": {
+      "file_name": "001-BCS-交付物管理-交付物清单.md",
+      "description": "交付物列表",
+      "version": "v3.1.0",
+      "checksum": "97afdee5f995c8c3",
+      "tags": [
+        "交付",
+        "清单"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-运维策略-运维策略总纲.md": {
+      "file_name": "001-BCS-运维策略-运维策略总纲.md",
+      "description": "DevOps运维整体方案",
+      "version": "v3.1.0",
+      "checksum": "b6ab1f660e66896d",
+      "tags": [
+        "运维",
+        "策略"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-安全管理-安全开发规范.md": {
+      "file_name": "001-BCS-安全管理-安全开发规范.md",
+      "description": "安全编码标准",
+      "version": "v3.1.0",
+      "checksum": "24361cdfc361e991",
+      "tags": [
+        "安全",
+        "规范"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-资产管理-资产清单.md": {
+      "file_name": "001-BCS-资产管理-资产清单.md",
+      "description": "项目资产列表",
+      "version": "v3.1.0",
+      "checksum": "52b4053101b4a648",
+      "tags": [
+        "资产",
+        "清单"
+      ],
+      "related_docs": []
+    },
+    "001-BCS-质量提升-持续改进计划.md": {
+      "file_name": "001-BCS-质量提升-持续改进计划.md",
+      "description": "优化改进方案",
+      "version": "v3.1.0",
+      "checksum": "e82943810fddf825",
+      "tags": [
+        "改进",
+        "优化"
+      ],
+      "related_docs": []
+    }
+  },
+  "traceability_chain": [
+    {
+      "timestamp": "2026-05-19T02:34:51.958774",
+      "document": "001-BCS-项目规划-项目章程与愿景.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "46d4be843059621f",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.958874",
+      "document": "002-BCS-项目规划-项目范围说明书.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "55fde70f41c5b728",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.958970",
+      "document": "003-BCS-项目规划-项目里程碑计划.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "8f230d7c16480fc7",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.959187",
+      "document": "001-BCS-需求规划-业务需求分析.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "a19a903deef39345",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.959281",
+      "document": "002-BCS-需求规划-产品需求文档.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "53198512a291d934",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.959483",
+      "document": "001-BCS-可行性分析-技术可行性分析.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "1b6b75900a09b057",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.959672",
+      "document": "001-BCS-风险管理-项目风险评估.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "2d65750e98eb1829",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960003",
+      "document": "001-BCS-架构设计-系统架构总览图.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "243b01564ef1c34f",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960090",
+      "document": "002-BCS-架构设计-九层功能架构设计.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "ea50a22738bd8466",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960169",
+      "document": "003-BCS-架构设计-技术选型论证报告.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "4a35383944277821",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960260",
+      "document": "004-BCS-架构设计-DevOps架构设计.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "99965159edbf2ae5",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960452",
+      "document": "001-BCS-详细设计-API层设计.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "2dd11c9d5e8fa2e9",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960529",
+      "document": "002-BCS-详细设计-组件体系设计.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "81c118b9c19a2bc9",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960608",
+      "document": "003-BCS-详细设计-主题系统设计.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "f386b66cfb3ad544",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.960922",
+      "document": "001-BCS-开发环境-开发环境搭建指南.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "efb5e8fedeaca8b8",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.961118",
+      "document": "001-BCS-开发规范-Git工作流规范.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "e99e64811d14fe28",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.961195",
+      "document": "002-BCS-开发规范-代码提交规范.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "a088dfc56eceefe4",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.961478",
+      "document": "001-BCS-测试策略-测试策略总纲.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "6b1faf8b2af199d1",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.961660",
+      "document": "001-BCS-质量审核-代码质量审核标准.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "fce27ec0196fc555",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.961980",
+      "document": "001-BCS-交付物管理-交付物清单.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "97afdee5f995c8c3",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.962513",
+      "document": "001-BCS-运维策略-运维策略总纲.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "b6ab1f660e66896d",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.962906",
+      "document": "001-BCS-安全管理-安全开发规范.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "24361cdfc361e991",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.963239",
+      "document": "001-BCS-资产管理-资产清单.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "52b4053101b4a648",
+      "author": "YanYuCloudCube Team"
+    },
+    {
+      "timestamp": "2026-05-19T02:34:51.963552",
+      "document": "001-BCS-质量提升-持续改进计划.md",
+      "action": "create",
+      "version": "v3.1.0",
+      "checksum": "e82943810fddf825",
+      "author": "YanYuCloudCube Team"
+    }
+  ]
+}

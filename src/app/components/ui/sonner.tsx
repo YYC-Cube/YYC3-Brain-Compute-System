@@ -1,0 +1,24 @@
+import { Toaster as Sonner, ToasterProps } from "sonner";
+import { useTheme } from "../ThemeContext";
+
+const Toaster = ({ ...props }: ToasterProps) => {
+  const { currentTheme } = useTheme();
+  const theme = currentTheme?.colors?.background ? "dark" : "system";
+
+  return (
+    <Sonner
+      theme={theme as ToasterProps["theme"]}
+      className="toaster group"
+      style={
+        {
+          "--normal-bg": "var(--popover)",
+          "--normal-text": "var(--popover-foreground)",
+          "--normal-border": "var(--border)",
+        } as React.CSSProperties
+      }
+      {...props}
+    />
+  );
+};
+
+export { Toaster };

@@ -1,0 +1,153 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: "Skip tests (emergency only)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "10"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        timeout-minutes: 5
+
+      - name: Lint (ESLint)
+        run: pnpm lint
+        timeout-minutes: 3
+
+      - name: TypeCheck (TypeScript)
+        run: pnpm typecheck
+        timeout-minutes: 3
+
+      - name: Test (Vitest)
+        if: github.event.inputs.skip_tests != 'true'
+        run: pnpm test:coverage
+        timeout-minutes: 5
+
+      - name: Build production bundle
+        run: pnpm build
+        timeout-minutes: 5
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || '' }}
+          VITE_WS_URL: ${{ secrets.VITE_WS_URL || '' }}
+          VITE_API_TEST_MODE: ${{ secrets.VITE_API_TEST_MODE || 'true' }}
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE || 'YYC³ Brain Computer System' }}
+          VITE_APP_VERSION: ${{ secrets.VITE_APP_VERSION || '3.1.0' }}
+
+      - name: Check bundle size
+        run: |
+          echo "📦 Build artifacts:"
+          du -sh ./dist/*
+          echo ""
+          echo "📊 Total size:"
+          du -sh ./dist
+          TOTAL_SIZE=$(du -sb ./dist | cut -f1)
+          MAX_SIZE=52428800  # 50MB limit
+          if [ "$TOTAL_SIZE" -gt "$MAX_SIZE" ]; then
+            echo "::warning::Build size exceeds 50MB threshold"
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+          retention-days: 7
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        timeout-minutes: 5
+
+      - name: Deployment Summary
+        if: success()
+        run: |
+          echo "# 🚀 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📋 Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Domain** | https://brain.yyc3.vip |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Triggered by** | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Time** | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Workflow Run** | [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Quality Gates Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ ESLint Linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ TypeScript Type Checking" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Unit Tests (if enabled)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Production Build" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ GitHub Pages Deployment" >> $GITHUB_STEP_SUMMARY
+
+      - name: Verify deployment
+        if: success()
+        run: |
+          echo "⏳ Waiting for DNS propagation..."
+          sleep 10
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://brain.yyc3.vip || echo "000")
+          if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "301" ] || [ "$HTTP_STATUS" = "302" ]; then
+            echo "✅ Domain accessible (HTTP $HTTP_STATUS)"
+          else
+            echo "::warning::Domain may not be accessible yet (HTTP $HTTP_STATUS). This is normal for new deployments."
+          fi
