@@ -72,7 +72,7 @@ jobs:
 
       - name: Test (Vitest)
         if: github.event.inputs.skip_tests != 'true'
-        run: pnpm test:coverage
+        run: pnpm test
         timeout-minutes: 5
 
       - name: Build production bundle
