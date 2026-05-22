@@ -14,6 +14,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, type Plugin } from 'vite';
+import compression from 'vite-plugin-compression';
 
 const LOGO_PLACEHOLDER = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#06b6d4"/><text x="16" y="22" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Y</text></svg>')}`;
 
@@ -45,6 +46,17 @@ export default defineConfig({
       open: true,
       gzipSize: true,
       brotliSize: true,
+    }),
+    compression({
+      algorithm: 'brotliCompress',
+      threshold: 10240,
+      compressionOptions: {
+        level: 11,
+      },
+    }),
+    compression({
+      algorithm: 'gzip',
+      threshold: 10240,
     }),
   ],
   resolve: {
