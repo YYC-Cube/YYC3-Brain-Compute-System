@@ -1,10 +1,16 @@
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Play, CheckCircle, XCircle, Clock, AlertTriangle, RefreshCw,
-  ChevronRight, FileText, Zap, BarChart3, Filter
+  AlertTriangle,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  Play,
+  RefreshCw,
+  XCircle,
+  Zap
 } from 'lucide-react';
-import { FuturisticPanel } from '../FuturisticPanel';
+import { AnimatePresence, motion } from 'motion/react';
+import { useCallback, useState } from 'react';
+
 import { useLanguage } from '../LanguageContext';
 
 // ===== Test Case Definition =====
@@ -1600,7 +1606,7 @@ export function TestRunner() {
     setIsRunning(true);
     // Simulate running tests sequentially
     setTests(prev => prev.map(t => ({ ...t, status: 'running' as const })));
-    
+
     let idx = 0;
     const interval = setInterval(() => {
       if (idx >= TEST_CASES.length) {
@@ -1626,9 +1632,8 @@ export function TestRunner() {
           <h2 className="text-2xl text-cyan-400 flex items-center gap-2" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
             <Zap className="w-6 h-6" />
             {isZh ? '测试用例' : 'Test Runner'}
-            <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
-              passRate === 100 ? 'bg-green-900/30 text-green-300 border-green-500/30' : 'bg-yellow-900/30 text-yellow-300 border-yellow-500/30'
-            }`}>
+            <span className={`text-xs font-mono px-2 py-0.5 rounded border ${passRate === 100 ? 'bg-green-900/30 text-green-300 border-green-500/30' : 'bg-yellow-900/30 text-yellow-300 border-yellow-500/30'
+              }`}>
               {passRate}% PASS
             </span>
           </h2>
@@ -1715,7 +1720,7 @@ export function TestRunner() {
                 className="w-full text-left px-4 py-3 flex items-center gap-3"
               >
                 <StIcon className={`w-4 h-4 shrink-0 ${st.color} ${test.status === 'running' ? 'animate-spin' : ''}`} />
-                
+
                 <span className="text-[10px] text-gray-600 font-mono w-20 shrink-0" style={{ fontSize: '0.65rem' }}>{test.id}</span>
 
                 <div className="flex-1 min-w-0">
@@ -1728,9 +1733,8 @@ export function TestRunner() {
                   {isZh ? cat.label : cat.labelEn}
                 </span>
 
-                <span className={`text-[10px] px-1.5 py-0.5 rounded bg-gray-800 shrink-0 hidden sm:inline ${
-                  test.priority === 'P0' ? 'text-red-400' : test.priority === 'P1' ? 'text-yellow-400' : 'text-gray-400'
-                }`} style={{ fontSize: '0.6rem' }}>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded bg-gray-800 shrink-0 hidden sm:inline ${test.priority === 'P0' ? 'text-red-400' : test.priority === 'P1' ? 'text-yellow-400' : 'text-gray-400'
+                  }`} style={{ fontSize: '0.6rem' }}>
                   {test.priority}
                 </span>
 

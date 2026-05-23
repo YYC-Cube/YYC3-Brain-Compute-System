@@ -1,13 +1,24 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'motion/react';
 import {
-  Activity, Cpu, MemoryStick, HardDrive, Wifi, AlertTriangle,
-  CheckCircle, Clock, TrendingUp, TrendingDown, RefreshCw,
-  Bell, Server, Database, Monitor, Zap, ArrowUpRight, ArrowDownRight
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Cpu, MemoryStick,
+  RefreshCw, Server,
+  Wifi
 } from 'lucide-react';
+import { motion } from 'motion/react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  Tooltip,
+  XAxis, YAxis
 } from 'recharts';
 import { FuturisticPanel } from '../FuturisticPanel';
 import { useLanguage } from '../LanguageContext';
@@ -148,11 +159,10 @@ export function MonitorDashboard() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-1.5 rounded-md text-xs transition-all ${
-              activeTab === tab.key
+            className={`px-3 py-1.5 rounded-md text-xs transition-all ${activeTab === tab.key
                 ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
                 : 'text-gray-400 hover:text-gray-200 border border-transparent'
-            }`}
+              }`}
             style={{ fontSize: '0.75rem' }}
           >
             {tab.label}
@@ -300,13 +310,12 @@ export function MonitorDashboard() {
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${
-                    alert.level === 'critical'
+                  className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${alert.level === 'critical'
                       ? 'bg-red-900/10 border-red-500/30 hover:bg-red-900/20'
                       : alert.level === 'warning'
-                      ? 'bg-yellow-900/10 border-yellow-500/30 hover:bg-yellow-900/20'
-                      : 'bg-gray-800/30 border-gray-700/50 hover:bg-gray-800/50'
-                  }`}
+                        ? 'bg-yellow-900/10 border-yellow-500/30 hover:bg-yellow-900/20'
+                        : 'bg-gray-800/30 border-gray-700/50 hover:bg-gray-800/50'
+                    }`}
                 >
                   <div className="shrink-0 mt-0.5">
                     {alert.level === 'critical' ? (

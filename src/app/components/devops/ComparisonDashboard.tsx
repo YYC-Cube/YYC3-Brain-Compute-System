@@ -252,7 +252,7 @@ function EndpointCard({ data, endpointKey, isZh }: { data: EndpointData; endpoin
 }
 
 /** TimeRangeSelector — 时间范围选择器 */
-function TimeRangeSelector({ value, onChange, isZh }: { value: TimeRange; onChange: (v: TimeRange) => void; isZh: boolean }) {
+function TimeRangeSelector({ value, onChange, isZh }: { value: TimeRange; onChange: (_v: TimeRange) => void; isZh: boolean }) {
   return (
     <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
       {TIME_RANGES.map((range) => (
@@ -274,7 +274,7 @@ function TimeRangeSelector({ value, onChange, isZh }: { value: TimeRange; onChan
 }
 
 /** ExportButton — 导出按钮 */
-function ExportButton({ isZh, onExport }: { isZh: boolean; onExport: (format: 'pdf' | 'excel') => void }) {
+function ExportButton({ isZh, onExport }: { isZh: boolean; onExport: (_format: 'pdf' | 'excel') => void }) {
   const [open, setOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
 

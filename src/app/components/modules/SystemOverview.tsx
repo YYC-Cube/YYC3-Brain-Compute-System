@@ -7,18 +7,17 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
-  LayoutDashboard, Activity, Zap, Shield, Cpu, Network, Server,
+  Activity, Shield, Cpu, Network, Server,
   ArrowRight, ArrowUpRight, ArrowDownRight, CheckCircle,
   HardDrive, Monitor, FileText, Key, AlertTriangle, Clock,
-  Wrench, Brain, BarChart3, History, Crosshair, Target,
-  TrendingUp, TrendingDown, Wifi, Database, Globe, Eye,
-  RefreshCw
+  Wrench, Brain, BarChart3, History, Crosshair,
+  Wifi, Database, RefreshCw
 } from 'lucide-react';
 import { FuturisticPanel } from '../FuturisticPanel';
-import { NeonBorder } from '../NeonBorder';
-import { FuturisticGrid } from '../FuturisticGrid';
+
+
 import { useLanguage } from '../LanguageContext';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -26,7 +25,7 @@ import {
 } from 'recharts';
 
 interface SystemOverviewProps {
-  onNavigate?: (id: string) => void;
+  onNavigate?: (_id: string) => void;
 }
 
 // ===== Mock Live Data Generator =====

@@ -12,16 +12,16 @@ import {
   ChevronRight, HardDrive, Monitor, FileText, Key,
   Target, Crosshair, Wrench, FlaskConical, Brain, FolderOpen,
   Terminal, Code, FileCode, Palette, Sparkles, BarChart3, History, Sliders,
-  Pin, PinOff, ChevronLeft, ChevronDown
+  Pin, PinOff, ChevronDown
 } from 'lucide-react';
 import logo from 'figma:asset/e53d9619a35d8a04f00785f03278798ee0e23e49.png';
 import { useLanguage } from '../LanguageContext';
 
 interface SidebarProps {
   activeModule: string;
-  setActiveModule: (id: string) => void;
+  setActiveModule: (_id: string) => void;
   isOpen?: boolean;
-  onTogglePin?: (pinned: boolean) => void;
+  onTogglePin?: (_pinned: boolean) => void;
 }
 
 export function Sidebar({ activeModule, setActiveModule, isOpen = true, onTogglePin }: SidebarProps) {

@@ -6,7 +6,6 @@
  */
 
 import { API_CONFIG, AUTH_CONFIG, ERROR_MESSAGES } from './config';
-import type { ApiResponse, PaginatedResponse } from './types';
 
 // ===== 请求选项 =====
 interface RequestOptions {
@@ -20,9 +19,12 @@ interface RequestOptions {
 // ===== 错误类 =====
 export class ApiError extends Error {
   constructor(
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     public status: number,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     public messageZh: string,
     public messageEn: string,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     public data?: unknown
   ) {
     super(messageEn);

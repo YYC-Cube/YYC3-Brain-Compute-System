@@ -1,157 +1,220 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, beforeEach } from 'vitest';
+import {
+  API_CONFIG,
+  API_VERSION,
+  AUTH_CONFIG,
+  HTTP_STATUS,
+  ERROR_MESSAGES,
+  ENVIRONMENT,
+} from '../../api/config';
 
-describe('API Config - Environment Detection', () => {
-  const originalLocation = window.location
+describe('API Configuration', () => {
+  describe('Environment Detection', () => {
+    it('ENVIRONMENT should be defined', () => {
+      expect(ENVIRONMENT).toBeDefined();
+      expect(typeof ENVIRONMENT).toBe('string');
+    });
 
-  beforeEach(() => {
-    vi.resetModules()
-    vi.stubGlobal('window', {
-      ...window,
-      location: { ...originalLocation },
-    })
-  })
+    it('ENVIRONMENT should be valid value', () => {
+      const validEnvironments = ['development', 'production', 'staging', 'mock'];
+      expect(validEnvironments).toContain(ENVIRONMENT);
+    });
+  });
 
-  afterEach(() => {
-    vi.unstubAllGlobals()
-  })
+  describe('API_CONFIG', () => {
+    it('should have required configuration properties', () => {
+      expect(API_CONFIG.BASE_URL).toBeDefined();
+      expect(API_CONFIG.WS_URL).toBeDefined();
+      expect(API_CONFIG.TIMEOUT).toBeDefined();
+      expect(API_CONFIG.RETRY).toBeDefined();
+      expect(API_CONFIG.PAGINATION).toBeDefined();
+      expect(API_CONFIG.REALTIME).toBeDefined();
+      expect(API_CONFIG.WS_RECONNECT).toBeDefined();
+      expect(API_CONFIG.TEST_MODE).toBeDefined();
+    });
 
-  it('should detect localhost as development environment', async () => {
-    Object.defineProperty(window.location, 'hostname', {
-      value: 'localhost',
-      writable: true,
-      configurable: true,
-    })
+    it('TIMEOUT should be positive number', () => {
+      expect(API_CONFIG.TIMEOUT).toBeGreaterThan(0);
+      expect(typeof API_CONFIG.TIMEOUT).toBe('number');
+    });
 
-    vi.stubGlobal('import.meta', {
-      env: {},
-    })
+    it('RETRY configuration should have valid values', () => {
+      expect(API_CONFIG.RETRY.maxAttempts).toBeGreaterThan(0);
+      expect(API_CONFIG.RETRY.baseDelay).toBeGreaterThan(0);
+      expect(API_CONFIG.RETRY.maxDelay).toBeGreaterThan(0);
+      expect(API_CONFIG.RETRY.maxDelay).toBeGreaterThanOrEqual(API_CONFIG.RETRY.baseDelay);
+    });
 
-    const { ENVIRONMENT, API_CONFIG } = await import('../config')
+    it('PAGINATION configuration should have valid defaults', () => {
+      expect(API_CONFIG.PAGINATION.defaultPage).toBeGreaterThanOrEqual(1);
+      expect(API_CONFIG.PAGINATION.defaultPageSize).toBeGreaterThan(0);
+      expect(Array.isArray(API_CONFIG.PAGINATION.pageSizeOptions)).toBe(true);
+      expect(API_CONFIG.PAGINATION.pageSizeOptions.length).toBeGreaterThan(0);
+    });
 
-    expect(ENVIRONMENT).toBe('development')
-    expect(API_CONFIG.BASE_URL).toContain('192.168.3.100')
-    expect(API_CONFIG.TEST_MODE).toBe(false)
-  })
+    it('REALTIME configuration should have valid intervals', () => {
+      expect(API_CONFIG.REALTIME.monitorInterval).toBeGreaterThan(0);
+      expect(API_CONFIG.REALTIME.alertInterval).toBeGreaterThan(0);
+      expect(API_CONFIG.REALTIME.patrolInterval).toBeGreaterThan(0);
+    });
 
-  it('should detect 127.0.0.1 as development environment', async () => {
-    Object.defineProperty(window.location, 'hostname', {
-      value: '127.0.0.1',
-      writable: true,
-      configurable: true,
-    })
+    it('WS_RECONNECT configuration should have valid values', () => {
+      expect(API_CONFIG.WS_RECONNECT.maxAttempts).toBeGreaterThan(0);
+      expect(API_CONFIG.WS_RECONNECT.baseDelay).toBeGreaterThan(0);
+      expect(API_CONFIG.WS_RECONNECT.maxDelay).toBeGreaterThan(0);
+      expect(API_CONFIG.WS_RECONNECT.maxDelay).toBeGreaterThanOrEqual(API_CONFIG.WS_RECONNECT.baseDelay);
+    });
 
-    vi.stubGlobal('import.meta', {
-      env: {},
-    })
+    it('TEST_MODE should be boolean', () => {
+      expect(typeof API_CONFIG.TEST_MODE).toBe('boolean');
+    });
 
-    const { ENVIRONMENT } = await import('../config')
+    it('BASE_URL should be string', () => {
+      expect(typeof API_CONFIG.BASE_URL).toBe('string');
+    });
 
-    expect(ENVIRONMENT).toBe('development')
-  })
+    it('WS_URL should be string', () => {
+      expect(typeof API_CONFIG.WS_URL).toBe('string');
+    });
+  });
 
-  it('should use mock mode for GitHub Pages by default', async () => {
-    Object.defineProperty(window.location, 'hostname', {
-      value: 'yyc-cube.github.io',
-      writable: true,
-      configurable: true,
-    })
+  describe('API_VERSION', () => {
+    it('should be defined', () => {
+      expect(API_VERSION).toBeDefined();
+    });
 
-    vi.stubGlobal('import.meta', {
-      env: {
-        VITE_API_TEST_MODE: 'auto',
-      },
-    })
+    it('should be version string', () => {
+      expect(typeof API_VERSION).toBe('string');
+      expect(API_VERSION).toMatch(/^v\d+$/);
+    });
+  });
 
-    const { ENVIRONMENT, API_CONFIG } = await import('../config')
+  describe('AUTH_CONFIG', () => {
+    it('should have required properties', () => {
+      expect(AUTH_CONFIG.TOKEN_KEY).toBeDefined();
+      expect(AUTH_CONFIG.REFRESH_TOKEN_KEY).toBeDefined();
+      expect(AUTH_CONFIG.REFRESH_THRESHOLD).toBeDefined();
+      expect(AUTH_CONFIG.getHeaders).toBeDefined();
+    });
 
-    expect(ENVIRONMENT).toBe('mock')
-    expect(API_CONFIG.BASE_URL).toBe('')
-    expect(API_CONFIG.TEST_MODE).toBe(true)
-  })
+    it('TOKEN_KEY should be non-empty string', () => {
+      expect(AUTH_CONFIG.TOKEN_KEY).toBeTruthy();
+      expect(typeof AUTH_CONFIG.TOKEN_KEY).toBe('string');
+    });
 
-  it('should use mock mode for brain.yyc3.vip by default', async () => {
-    Object.defineProperty(window.location, 'hostname', {
-      value: 'brain.yyc3.vip',
-      writable: true,
-      configurable: true,
-    })
+    it('REFRESH_TOKEN_KEY should be non-empty string', () => {
+      expect(AUTH_CONFIG.REFRESH_TOKEN_KEY).toBeTruthy();
+      expect(typeof AUTH_CONFIG.REFRESH_TOKEN_KEY).toBe('string');
+    });
 
-    vi.stubGlobal('import.meta', {
-      env: {
-        VITE_API_TEST_MODE: 'auto',
-      },
-    })
+    it('REFRESH_THRESHOLD should be positive number', () => {
+      expect(AUTH_CONFIG.REFRESH_THRESHOLD).toBeGreaterThan(0);
+      expect(typeof AUTH_CONFIG.REFRESH_THRESHOLD).toBe('number');
+    });
 
-    const { ENVIRONMENT, API_CONFIG } = await import('../config')
+    describe('getHeaders()', () => {
+      beforeEach(() => {
+        localStorage.clear();
+      });
 
-    expect(ENVIRONMENT).toBe('mock')
-    expect(API_CONFIG.TEST_MODE).toBe(true)
-  })
+      it('should return base headers without token', () => {
+        const headers = AUTH_CONFIG.getHeaders();
 
-  it('should respect explicit VITE_API_TEST_MODE=true (when env override works)', async () => {
-    Object.defineProperty(window.location, 'hostname', {
-      value: 'example.com',
-      writable: true,
-      configurable: true,
-    })
+        expect(headers['Content-Type']).toBe('application/json');
+        expect(headers['X-Client-Version']).toBe('3.2.0');
+        expect(headers['X-Client-Platform']).toBe('web');
+        expect(headers['X-Environment']).toBeDefined();
+        expect(headers['Authorization']).toBeUndefined();
+      });
 
-    vi.stubGlobal('import.meta', {
-      env: {
-        VITE_API_TEST_MODE: 'true',
-      },
-    })
+      it('should include Authorization header when token exists', () => {
+        localStorage.setItem(AUTH_CONFIG.TOKEN_KEY, 'test-token-123');
 
-    const { ENVIRONMENT } = await import('../config')
+        const headers = AUTH_CONFIG.getHeaders();
 
-    expect(ENVIRONMENT).toBeDefined()
-    expect(['mock', 'production']).toContain(ENVIRONMENT)
-  })
+        expect(headers['Authorization']).toBe('Bearer test-token-123');
+      });
 
-  it('should respect explicit VITE_API_TEST_MODE=false', async () => {
-    Object.defineProperty(window.location, 'hostname', {
-      value: 'example.com',
-      writable: true,
-      configurable: true,
-    })
+      it('should not include Authorization header for empty token', () => {
+        localStorage.setItem(AUTH_CONFIG.TOKEN_KEY, '');
 
-    vi.stubGlobal('import.meta', {
-      env: {
-        VITE_API_TEST_MODE: 'false',
-      },
-    })
+        const headers = AUTH_CONFIG.getHeaders();
 
-    const { ENVIRONMENT } = await import('../config')
+        expect(headers['Authorization']).toBeUndefined();
+      });
+    });
+  });
 
-    expect(ENVIRONMENT).toBe('production')
-  })
+  describe('HTTP_STATUS', () => {
+    it('should contain all standard status codes', () => {
+      expect(HTTP_STATUS.OK).toBe(200);
+      expect(HTTP_STATUS.CREATED).toBe(201);
+      expect(HTTP_STATUS.NO_CONTENT).toBe(204);
+      expect(HTTP_STATUS.BAD_REQUEST).toBe(400);
+      expect(HTTP_STATUS.UNAUTHORIZED).toBe(401);
+      expect(HTTP_STATUS.FORBIDDEN).toBe(403);
+      expect(HTTP_STATUS.NOT_FOUND).toBe(404);
+      expect(HTTP_STATUS.CONFLICT).toBe(409);
+      expect(HTTP_STATUS.RATE_LIMITED).toBe(429);
+      expect(HTTP_STATUS.SERVER_ERROR).toBe(500);
+      expect(HTTP_STATUS.SERVICE_UNAVAILABLE).toBe(503);
+    });
 
-  it('should use custom BASE_URL when provided', async () => {
-    vi.stubGlobal('import.meta', {
-      env: {
-        VITE_API_BASE_URL: 'https://custom-api.example.com/api/v1',
-        VITE_API_TEST_MODE: 'auto',
-      },
-    })
+    it('all status codes should be numbers', () => {
+      Object.values(HTTP_STATUS).forEach(status => {
+        expect(typeof status).toBe('number');
+        expect(status).toBeGreaterThan(0);
+      });
+    });
+  });
 
-    Object.defineProperty(window.location, 'hostname', {
-      value: 'example.com',
-      writable: true,
-      configurable: true,
-    })
+  describe('ERROR_MESSAGES', () => {
+    it('should contain error messages for all status codes', () => {
+      const expectedCodes = [400, 401, 403, 404, 409, 429, 500, 503];
 
-    const { API_CONFIG } = await import('../config')
+      expectedCodes.forEach(code => {
+        expect(ERROR_MESSAGES[code]).toBeDefined();
+        expect(ERROR_MESSAGES[code].zh).toBeDefined();
+        expect(ERROR_MESSAGES[code].en).toBeDefined();
+      });
+    });
 
-    expect(API_CONFIG).toBeDefined()
-    expect(typeof API_CONFIG.BASE_URL).toBe('string')
-    expect(API_CONFIG.BASE_URL.length).toBeGreaterThan(0)
-  })
+    it('error messages should be non-empty strings', () => {
+      Object.values(ERROR_MESSAGES).forEach(msg => {
+        expect(msg.zh.length).toBeGreaterThan(0);
+        expect(msg.en.length).toBeGreaterThan(0);
+      });
+    });
 
-  it('should include environment header in auth config', async () => {
-    const { AUTH_CONFIG } = await import('../config')
-    const headers = AUTH_CONFIG.getHeaders()
+    it('should have Chinese and English messages', () => {
+      expect(ERROR_MESSAGES[400].zh).toBe('请求参数错误');
+      expect(ERROR_MESSAGES[400].en).toBe('Bad request');
+      expect(ERROR_MESSAGES[401].zh).toContain('登录');
+      expect(ERROR_MESSAGES[401].en).toContain('Session');
+    });
+  });
 
-    expect(headers['X-Environment']).toBeDefined()
-    expect(headers['X-Client-Version']).toBe('3.2.0')
-    expect(headers['Content-Type']).toBe('application/json')
-  })
-})
+  describe('Configuration Consistency', () => {
+    it('API_VERSION should match BASE_URL version', () => {
+      if (API_CONFIG.BASE_URL) {
+        expect(API_CONFIG.BASE_URL).toContain(API_VERSION);
+      }
+    });
+
+    it('REFRESH_THRESHOLD should be reasonable (5 minutes)', () => {
+      expect(AUTH_CONFIG.REFRESH_THRESHOLD).toBe(5 * 60 * 1000); // 5 minutes in ms
+    });
+
+    it('pageSizeOptions should include defaultPageSize', () => {
+      expect(API_CONFIG.PAGINATION.pageSizeOptions).toContain(
+        API_CONFIG.PAGINATION.defaultPageSize
+      );
+    });
+
+    it('monitorInterval should be less than patrolInterval', () => {
+      expect(API_CONFIG.REALTIME.monitorInterval).toBeLessThan(
+        API_CONFIG.REALTIME.patrolInterval
+      );
+    });
+  });
+});

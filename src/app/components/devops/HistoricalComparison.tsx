@@ -13,21 +13,40 @@
  * @see /docs/phase-6.1-kickoff.md
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  History, TrendingUp, TrendingDown, Minus, ArrowUpRight, ArrowDownRight,
-  BarChart3, Cpu, HardDrive, Server, AlertTriangle, RefreshCw, Clock,
-  Calendar, ChevronDown, Layers, Activity, Zap, Info, MonitorSpeaker
+  Activity,
+  AlertTriangle,
+  ArrowDownRight,
+  ArrowUpRight,
+  BarChart3,
+  Calendar,
+  Clock,
+  Cpu, HardDrive,
+  History,
+  Info,
+  Layers,
+  Minus,
+  MonitorSpeaker,
+  RefreshCw,
+  Zap
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer, BarChart, Bar, ReferenceLine
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ReferenceLine,
+  Tooltip,
+  XAxis, YAxis
 } from 'recharts';
-import { FuturisticPanel } from '../FuturisticPanel';
-import { ChartContainer } from '../ChartContainer';
-import { useLanguage } from '../LanguageContext';
 import { useApi } from '../../api/hooks';
+import { ChartContainer } from '../ChartContainer';
+import { FuturisticPanel } from '../FuturisticPanel';
+import { useLanguage } from '../LanguageContext';
 
 // ===== Types =====
 interface PeriodData {
@@ -378,11 +397,10 @@ export function HistoricalComparison() {
                 <button
                   key={mode.value}
                   onClick={() => setCompareMode(mode.value)}
-                  className={`px-3 py-1.5 rounded-md text-[13px] transition-all ${
-                    compareMode === mode.value
+                  className={`px-3 py-1.5 rounded-md text-[13px] transition-all ${compareMode === mode.value
                       ? 'bg-cyan-500/20 text-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.15)]'
                       : 'text-gray-400 hover:text-gray-300 hover:bg-white/5'
-                  }`}
+                    }`}
                   style={compareMode === mode.value ? { border: '1px solid rgba(34,211,238,0.3)' } : { border: '1px solid transparent' }}
                 >
                   <Calendar size={12} className="inline mr-1.5" />
@@ -457,11 +475,10 @@ export function HistoricalComparison() {
                 <button
                   key={ep}
                   onClick={() => setActiveEndpoint(ep)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-[13px] transition-all ${
-                    activeEndpoint === ep
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-[13px] transition-all ${activeEndpoint === ep
                       ? 'bg-white/10 text-white'
                       : 'text-gray-400 hover:text-gray-300'
-                  }`}
+                    }`}
                   style={activeEndpoint === ep ? {
                     border: `1px solid ${ENDPOINT_COLORS[ep]}40`,
                     boxShadow: `0 0 8px ${ENDPOINT_COLORS[ep]}15`,
@@ -480,11 +497,10 @@ export function HistoricalComparison() {
               <button
                 key={m}
                 onClick={() => setActiveMetric(m)}
-                className={`px-3 py-1.5 rounded-md text-[13px] transition-all ${
-                  activeMetric === m
+                className={`px-3 py-1.5 rounded-md text-[13px] transition-all ${activeMetric === m
                     ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
                     : 'text-gray-400 hover:text-gray-300 border border-transparent'
-                }`}
+                  }`}
               >
                 {isZh ? METRIC_CONFIG[m].zh : METRIC_CONFIG[m].en}
               </button>

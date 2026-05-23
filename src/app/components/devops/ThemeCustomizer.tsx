@@ -801,7 +801,7 @@ function ExportTab() {
 }
 
 // ===== Reusable: Color Editor =====
-function ColorEditor({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function ColorEditor({ label, value, onChange }: { label: string; value: string; onChange: (_v: string) => void }) {
   const parsed = parseOklch(value);
   return (
     <div className="flex items-center gap-3 p-2.5 bg-gray-900/40 rounded-lg border border-gray-800">

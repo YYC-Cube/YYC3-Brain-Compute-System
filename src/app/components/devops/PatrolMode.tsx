@@ -13,7 +13,7 @@ import { FuturisticPanel } from '../FuturisticPanel';
 import { useLanguage } from '../LanguageContext';
 
 // ===== Chart Container =====
-function ChartBox({ children, height = 180 }: { children: (w: number, h: number) => React.ReactNode; height?: number }) {
+function ChartBox({ children, height = 180 }: { children: (_w: number, _h: number) => React.ReactNode; height?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ width: 400, height });
   const measure = useCallback(() => {

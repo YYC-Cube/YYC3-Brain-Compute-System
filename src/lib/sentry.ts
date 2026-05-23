@@ -19,7 +19,7 @@ Sentry.init({
 
   beforeSend(event) {
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Sentry Event]', event);
+// [REMOVED] console.log('[Sentry Event]', event);
     }
 
     const error = event.exception?.values?.[0];

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Network, Shield, Lock, Activity, ArrowUp, ArrowDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Lock, Activity, ArrowUp, ArrowDown } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { FuturisticPanel } from '../FuturisticPanel';
 import { NeonBorder } from '../NeonBorder';

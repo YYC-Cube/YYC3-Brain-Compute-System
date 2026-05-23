@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  AlertTriangle, CheckCircle, XCircle, Clock, ChevronRight,
-  Eye, Zap, RotateCcw, ArrowRight, Flag, MessageSquare,
-  TrendingUp, Target, Activity, Bell, Filter, Search
+  AlertTriangle, CheckCircle, ChevronRight,
+  Eye, Zap,
+  ArrowRight, Target, Activity, TrendingUp, Bell
 } from 'lucide-react';
-import { FuturisticPanel } from '../FuturisticPanel';
+
 import { useLanguage } from '../LanguageContext';
 
 // ===== Types =====

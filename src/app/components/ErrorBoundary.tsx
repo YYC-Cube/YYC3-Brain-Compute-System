@@ -15,7 +15,7 @@ interface ErrorBoundaryProps {
   children: ReactNode
   fallback?: ReactNode
   module?: string
-  onError?: (error: Error, errorInfo: ErrorInfo) => void
+  onError?: (_error: Error, _errorInfo: ErrorInfo) => void
 }
 
 interface ErrorBoundaryState {

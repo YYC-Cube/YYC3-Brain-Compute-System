@@ -15,18 +15,46 @@
  * @see /docs/model-settings-integration.md
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
-  X, Plus, Trash2, Edit3, Check, ChevronDown, ChevronRight,
-  Server, Cloud, Bot, Sparkles, RefreshCw, ExternalLink,
-  Eye, EyeOff, AlertCircle, CheckCircle2, Copy, Search,
-  Zap, Loader2, XCircle, Clock, Settings2,
-  Shield, Globe, Cpu, Activity, Terminal,
-  ArrowRight, Wifi, Plug, AlertTriangle,
-  FileCode2, PlusCircle, MinusCircle, Lightbulb, Bug
+  Activity,
+  AlertCircle,
+  ArrowRight,
+  Bot,
+  Bug,
+  Check,
+  CheckCircle2,
+  ChevronDown, ChevronRight,
+  Clock,
+  Cloud,
+  Copy,
+  Cpu,
+  Edit3,
+  ExternalLink,
+  Eye, EyeOff,
+  FileCode2,
+  Globe,
+  Lightbulb,
+  Loader2,
+  MinusCircle,
+  Plug,
+  Plus,
+  PlusCircle,
+  RefreshCw,
+  Search,
+  Server,
+  Settings2,
+  Shield,
+  Sparkles,
+  Terminal,
+  Trash2,
+  Wifi,
+  X,
+  XCircle,
+  Zap
 } from 'lucide-react';
-import { useTheme } from '../ThemeContext';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FuturisticPanel } from '../FuturisticPanel';
+import { useTheme } from '../ThemeContext';
 
 /* ================================================================
    Types
@@ -82,6 +110,13 @@ interface OllamaDetectedModel {
   size: string;
   status: 'online' | 'offline';
   quantization: string;
+}
+
+interface OllamaRawModel {
+  name?: string;
+  model?: string;
+  size?: number;
+  details?: { parameter_size?: string; quantization_level?: string; family?: string };
 }
 
 interface AIModelConfig {
@@ -278,8 +313,8 @@ function loadJSON<T>(key: string, fallback: T): T {
   } catch { return fallback; }
 }
 
-function saveJSON(key: string, value: any) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+function saveJSON(key: string, value: unknown) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { }
 }
 
 /* ================================================================
@@ -290,7 +325,7 @@ function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
-      onClick={() => { navigator.clipboard.writeText(text).catch(() => {}); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+      onClick={() => { navigator.clipboard.writeText(text).catch(() => { }); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
       className="p-1 rounded text-white/20 hover:text-white/50 hover:bg-white/[0.04] transition-all"
       title="复制"
     >
@@ -323,12 +358,12 @@ function ProviderCard({
   provider: ProviderDef;
   apiKey: string;
   customUrl: string;
-  onApiKeyChange: (key: string) => void;
-  onUrlChange: (url: string) => void;
-  onAddModel: (model: ModelDef) => void;
-  onRemoveModel: (modelId: string) => void;
-  onTestConnection: (modelId: string) => void;
-  onSelectModel: (modelId: string) => void;
+  onApiKeyChange: (_key: string) => void;
+  onUrlChange: (_url: string) => void;
+  onAddModel: (_model: ModelDef) => void;
+  onRemoveModel: (_modelId: string) => void;
+  onTestConnection: (_modelId: string) => void;
+  onSelectModel: (_modelId: string) => void;
   activeModelKey: string | null;
   diagnostics: Record<string, DiagnosticResult>;
   expanded: boolean;
@@ -352,11 +387,10 @@ function ProviderCard({
   const hasActiveModel = activeModelKey ? activeModelKey.startsWith(provider.id + ':') : false;
 
   return (
-    <div className={`rounded-xl border overflow-hidden transition-all backdrop-blur-sm ${
-      hasActiveModel
-        ? 'border-indigo-500/30 bg-gradient-to-r from-indigo-500/[0.05] to-purple-500/[0.03] shadow-[0_0_30px_-8px_rgba(99,102,241,0.3)]'
-        : 'border-white/[0.08] bg-black/20 hover:border-white/[0.12]'
-    }`}>
+    <div className={`rounded-xl border overflow-hidden transition-all backdrop-blur-sm ${hasActiveModel
+      ? 'border-indigo-500/30 bg-gradient-to-r from-indigo-500/[0.05] to-purple-500/[0.03] shadow-[0_0_30px_-8px_rgba(99,102,241,0.3)]'
+      : 'border-white/[0.08] bg-black/20 hover:border-white/[0.12]'
+      }`}>
       {/* Header */}
       <button onClick={onToggle} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-white/[0.02] transition-all group">
         <div className={`w-9 h-9 rounded-xl ${provider.colorBg} border ${provider.colorBorder} flex items-center justify-center transition-transform group-hover:scale-105`}>
@@ -493,18 +527,16 @@ function ProviderCard({
                 const modelKey = provider.id + ':' + model.id;
                 const isActive = activeModelKey === modelKey;
                 return (
-                  <div key={model.id} className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-all group ${
-                    isActive
-                      ? 'bg-indigo-500/[0.12] border border-indigo-500/30 shadow-[0_0_15px_-4px_rgba(99,102,241,0.2)]'
-                      : 'bg-white/[0.02] hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08]'
-                  }`}>
-                    <div className={`w-2 h-2 rounded-full shrink-0 ${
-                      isActive ? 'bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.5)]' :
+                  <div key={model.id} className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-all group ${isActive
+                    ? 'bg-indigo-500/[0.12] border border-indigo-500/30 shadow-[0_0_15px_-4px_rgba(99,102,241,0.2)]'
+                    : 'bg-white/[0.02] hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08]'
+                    }`}>
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${isActive ? 'bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.5)]' :
                       diag?.status === 'success' ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]' :
-                      diag?.status === 'error' ? 'bg-red-400' :
-                      diag?.status === 'testing' ? 'bg-cyan-400 animate-pulse' :
-                      'bg-white/15'
-                    }`} />
+                        diag?.status === 'error' ? 'bg-red-400' :
+                          diag?.status === 'testing' ? 'bg-cyan-400 animate-pulse' :
+                            'bg-white/15'
+                      }`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className={`text-[12px] font-medium ${isActive ? 'text-indigo-300' : 'text-white/70'}`}>{model.name}</span>
@@ -668,7 +700,7 @@ function MCPConfigPanel() {
   const handleAdd = () => {
     if (!newServer.name || !newServer.command) return;
     let envObj: Record<string, string> = {};
-    try { if (newServer.env) envObj = JSON.parse(newServer.env); } catch {}
+    try { if (newServer.env) envObj = JSON.parse(newServer.env); } catch { }
     const server: MCPServerConfig = {
       id: 'mcp-' + Date.now(),
       name: newServer.name,
@@ -713,8 +745,8 @@ function MCPConfigPanel() {
       setServers(imported);
       setJsonMode(false);
       setJsonError('');
-    } catch (e: any) {
-      setJsonError('JSON 解析失败: ' + e.message);
+    } catch (e: unknown) {
+      setJsonError('JSON 解析失败: ' + (e instanceof Error ? e.message : String(e)));
     }
   };
 
@@ -772,15 +804,13 @@ function MCPConfigPanel() {
       {!jsonMode && (
         <div className="space-y-2">
           {servers.map(server => (
-            <div key={server.id} className={`rounded-xl border p-3.5 space-y-2.5 transition-all backdrop-blur-sm ${
-              server.enabled ? 'border-white/[0.08] bg-black/20' : 'border-white/[0.04] bg-black/10 opacity-50'
-            }`}>
+            <div key={server.id} className={`rounded-xl border p-3.5 space-y-2.5 transition-all backdrop-blur-sm ${server.enabled ? 'border-white/[0.08] bg-black/20' : 'border-white/[0.04] bg-black/10 opacity-50'
+              }`}>
               <div className="flex items-center gap-3">
                 <button onClick={() => handleToggle(server.id)} className="shrink-0">
                   <div className={`w-10 h-5 rounded-full transition-all ${server.enabled ? 'bg-violet-500/35' : 'bg-white/[0.08]'}`}>
-                    <div className={`w-4 h-4 rounded-full transition-all mt-0.5 ${
-                      server.enabled ? 'bg-violet-400 ml-[21px] shadow-[0_0_8px_rgba(139,92,246,0.5)]' : 'bg-white/25 ml-0.5'
-                    }`} />
+                    <div className={`w-4 h-4 rounded-full transition-all mt-0.5 ${server.enabled ? 'bg-violet-400 ml-[21px] shadow-[0_0_8px_rgba(139,92,246,0.5)]' : 'bg-white/25 ml-0.5'
+                      }`} />
                   </div>
                 </button>
                 <div className="flex-1 min-w-0">
@@ -876,8 +906,8 @@ function SmartDiagnosticsPanel({
   providers: ProviderDef[];
   apiKeys: Record<string, string>;
   diagnostics: Record<string, DiagnosticResult>;
-  onRunDiagnostic: (providerId: string, modelId: string) => void;
-  onSelectModel: (providerId: string, modelId: string) => void;
+  onRunDiagnostic: (_providerId: string, _modelId: string) => void;
+  onSelectModel: (_providerId: string, _modelId: string) => void;
   activeModelKey: string | null;
 }) {
   const [running, setRunning] = useState(false);
@@ -955,17 +985,16 @@ function SmartDiagnosticsPanel({
               const modelKey = provider.id + ':' + model.id;
               const isActive = activeModelKey === modelKey;
               return (
-                <div key={model.id} className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-all group ${
-                  isActive
-                    ? 'bg-indigo-500/[0.10] border border-indigo-500/25 shadow-[0_0_15px_-4px_rgba(99,102,241,0.2)]'
-                    : diag.status === 'success' ? 'bg-emerald-500/[0.05] border border-emerald-500/15 hover:border-emerald-500/25' :
+                <div key={model.id} className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-all group ${isActive
+                  ? 'bg-indigo-500/[0.10] border border-indigo-500/25 shadow-[0_0_15px_-4px_rgba(99,102,241,0.2)]'
+                  : diag.status === 'success' ? 'bg-emerald-500/[0.05] border border-emerald-500/15 hover:border-emerald-500/25' :
                     diag.status === 'error' ? 'bg-red-500/[0.05] border border-red-500/15' :
-                    'bg-white/[0.02] border border-white/[0.06]'
-                }`}>
+                      'bg-white/[0.02] border border-white/[0.06]'
+                  }`}>
                   {isActive ? <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" /> :
-                   diag.status === 'success' ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400/70 shrink-0" /> :
-                   diag.status === 'error' ? <XCircle className="w-3.5 h-3.5 text-red-400/70 shrink-0" /> :
-                   <Loader2 className="w-3.5 h-3.5 text-cyan-400/70 animate-spin shrink-0" />}
+                    diag.status === 'success' ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400/70 shrink-0" /> :
+                      diag.status === 'error' ? <XCircle className="w-3.5 h-3.5 text-red-400/70 shrink-0" /> :
+                        <Loader2 className="w-3.5 h-3.5 text-cyan-400/70 animate-spin shrink-0" />}
                   <span className={`text-[11px] flex-1 font-medium ${isActive ? 'text-indigo-300' : 'text-white/60'}`}>{model.name}</span>
                   {isActive && (
                     <span className="text-[9px] px-2 py-0.5 rounded-full bg-indigo-500/25 text-indigo-300 border border-indigo-500/25 shrink-0 font-medium">
@@ -1007,10 +1036,10 @@ function SmartDiagnosticsPanel({
                 <Bug className="w-3.5 h-3.5 text-amber-400/50 shrink-0 mt-0.5" />
                 <span><strong className="text-amber-400/60">{diag.modelName}</strong>: {
                   diag.message.includes('401') ? '请检查 API Key 是否正确配置且未过期' :
-                  diag.message.includes('429') ? '请求频率超限，建议稍后重试或升级配额' :
-                  diag.message.includes('网络') || diag.message.includes('fetch') ? '网络连接失败，请确认端点 URL 是否可达' :
-                  diag.message.includes('超时') ? '连接超时，可能是网络不稳定或服务暂时不可用' :
-                  '请检查配置或查看错误详情'
+                    diag.message.includes('429') ? '请求频率超限，建议稍后重试或升级配额' :
+                      diag.message.includes('网络') || diag.message.includes('fetch') ? '网络连接失败，请确认端点 URL 是否可达' :
+                        diag.message.includes('超时') ? '连接超时，可能是网络不稳定或服务暂时不可用' :
+                          '请检查配置或查看错误详情'
                 }</span>
               </div>
             ))}
@@ -1028,7 +1057,7 @@ function SmartDiagnosticsPanel({
 type TabKey = 'providers' | 'ollama' | 'mcp' | 'diagnostics';
 
 export function ModelSettings({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const { currentTheme } = useTheme();
+  useTheme();
 
   const [activeTab, setActiveTab] = useState<TabKey>('providers');
   const [searchQuery, setSearchQuery] = useState('');
@@ -1045,7 +1074,7 @@ export function ModelSettings({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   // Diagnostics
   const [diagnostics, setDiagnostics] = useState<Record<string, DiagnosticResult>>({});
-  
+
   // AI Models
   const [aiModels, setAiModels] = useState<AIModelConfig[]>(() => loadJSON(STORAGE_KEYS.aiModels, []));
   const [activeModelId, setActiveModelId] = useState<string | null>(() => loadJSON(STORAGE_KEYS.activeModelId, null));
@@ -1192,14 +1221,14 @@ export function ModelSettings({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
         setResult({ status: 'success', message: '连接成功', latency, modelResponse: reply.slice(0, 80) });
 
-      } catch (err: any) {
+      } catch (err: unknown) {
         clearTimeout(timer);
         const latency = Math.round(performance.now() - start);
-        if (err.name === 'AbortError') {
+        if (err instanceof Error && err.name === 'AbortError') {
           setResult({ status: 'error', message: '连接超时 (' + (timeoutMs / 1000) + 's)', latency });
           return;
         }
-        const msg = err.message || '';
+        const msg = err instanceof Error ? err.message : '';
         const networkMsg = (msg.includes('Failed to fetch') || msg.includes('NetworkError'))
           ? '网络连接失败 (CORS/防火墙/服务未启动)'
           : '测试异常: ' + msg.slice(0, 100);
@@ -1305,7 +1334,7 @@ export function ModelSettings({ isOpen, onClose }: { isOpen: boolean; onClose: (
     fetch(url)
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(data => {
-        const models: OllamaDetectedModel[] = (data.models || []).map((m: any) => ({
+        const models: OllamaDetectedModel[] = (data.models || []).map((m: OllamaRawModel) => ({
           name: m.name || m.model,
           size: m.size ? (m.size / 1e9).toFixed(1) + ' GB' : 'N/A',
           status: 'online' as const,
@@ -1389,11 +1418,10 @@ export function ModelSettings({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-[12px] transition-all border-b-2 whitespace-nowrap font-medium ${
-                activeTab === key
-                  ? 'text-indigo-300 border-indigo-400 bg-indigo-500/10'
-                  : 'text-white/35 border-transparent hover:text-white/60 hover:bg-white/[0.02]'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-[12px] transition-all border-b-2 whitespace-nowrap font-medium ${activeTab === key
+                ? 'text-indigo-300 border-indigo-400 bg-indigo-500/10'
+                : 'text-white/35 border-transparent hover:text-white/60 hover:bg-white/[0.02]'
+                }`}
             >
               <Icon className="w-4 h-4" />
               {label}
@@ -1575,9 +1603,8 @@ export function ModelSettings({ isOpen, onClose }: { isOpen: boolean; onClose: (
                           <div className="text-[13px] text-white/80 font-medium">{model.name}</div>
                           <div className="text-[11px] text-white/30 font-mono">{model.size} · {model.quantization}</div>
                         </div>
-                        <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium ${
-                          model.status === 'online' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20' : 'bg-white/[0.05] text-white/25 border border-white/[0.06]'
-                        }`}>
+                        <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium ${model.status === 'online' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20' : 'bg-white/[0.05] text-white/25 border border-white/[0.06]'
+                          }`}>
                           {model.status === 'online' ? '在线' : '离线'}
                         </span>
                         {alreadyImported ? (

@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Terminal, ChevronRight, Trash2, Copy, Clock, ArrowUp, ArrowDown } from 'lucide-react';
+import { Terminal, ChevronRight, Trash2, Copy, Clock } from 'lucide-react';
 import { FuturisticPanel } from '../FuturisticPanel';
 import { useLanguage } from '../LanguageContext';
-import { useApi, useMutation } from '../../api/hooks';
+import { useMutation } from '../../api/hooks';
 import type { CLIExecuteResponse } from '../../api/types';
 
 interface HistoryEntry {
@@ -83,7 +83,6 @@ export function CLITerminal() {
     const current = parts[parts.length - 1].toLowerCase();
 
     // Find matching completions
-    const completionKey = prefix || (parts.length === 1 ? '' : '');
     let candidates: string[] = [];
 
     if (parts.length === 1) {

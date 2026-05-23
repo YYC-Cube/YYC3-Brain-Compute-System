@@ -1,13 +1,28 @@
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Server, Database, HardDrive, Search, Filter, Plus, Edit3, Trash2,
-  ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal, RefreshCw,
-  Download, Eye, AlertTriangle, CheckCircle, XCircle, Wrench,
-  Monitor, Cpu, MemoryStick, X, Save, Tag, ArrowLeft
+  AlertTriangle,
+  ArrowLeft,
+  CheckCircle,
+  ChevronLeft, ChevronRight,
+  Database,
+  Download,
+  Edit3,
+  Eye,
+  HardDrive,
+  Monitor,
+  Plus,
+  RefreshCw,
+  Save,
+  Search,
+  Server,
+  Tag,
+  Wrench,
+  X,
+  XCircle
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useMemo, useState } from 'react';
 import { FuturisticPanel } from '../FuturisticPanel';
-import { NeonBorder } from '../NeonBorder';
+
 import { useLanguage } from '../LanguageContext';
 
 // ===== Mock Data =====
@@ -141,7 +156,7 @@ const endpointMap = {
 };
 
 export function DeviceManagement() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const isZh = language === 'zh';
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -274,11 +289,10 @@ export function DeviceManagement() {
             <button
               key={tab.key}
               onClick={() => { setFilterEndpoint(tab.key); setCurrentPage(1); }}
-              className={`px-3 py-1.5 rounded-md text-xs transition-all ${
-                filterEndpoint === tab.key
-                  ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
-                  : 'text-gray-400 hover:text-gray-200 border border-transparent'
-              }`}
+              className={`px-3 py-1.5 rounded-md text-xs transition-all ${filterEndpoint === tab.key
+                ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-gray-200 border border-transparent'
+                }`}
               style={{ fontSize: '0.75rem' }}
             >
               {tab.label}
@@ -354,7 +368,7 @@ export function DeviceManagement() {
             <AnimatePresence>
               {pagedDevices.map((device, idx) => {
                 const statusInfo = statusMap[device.status];
-                const StatusIcon = statusInfo.icon;
+                const _StatusIcon = statusInfo.icon;
                 const typeInfo = typeMap[device.type];
                 const TypeIcon = typeInfo.icon;
                 const epInfo = endpointMap[device.endpoint];
@@ -366,9 +380,8 @@ export function DeviceManagement() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className={`border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors cursor-pointer ${
-                      device.status === 'error' ? 'bg-red-900/5' : ''
-                    }`}
+                    className={`border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors cursor-pointer ${device.status === 'error' ? 'bg-red-900/5' : ''
+                      }`}
                     onClick={() => setViewDevice(device)}
                   >
                     <td className="py-3 px-4" onClick={e => e.stopPropagation()}>
@@ -498,11 +511,10 @@ export function DeviceManagement() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`w-8 h-8 rounded-lg text-xs transition-colors ${
-                currentPage === page
-                  ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
-                  : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white'
-              }`}
+              className={`w-8 h-8 rounded-lg text-xs transition-colors ${currentPage === page
+                ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
+                : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white'
+                }`}
               style={{ fontSize: '0.75rem' }}
             >
               {page}
@@ -529,11 +541,11 @@ function DeviceDetailView({
   onBack: () => void;
   isZh: boolean;
   editingField: string | null;
-  setEditingField: (f: string | null) => void;
+  setEditingField: (_f: string | null) => void;
   editValue: string;
-  setEditValue: (v: string) => void;
-  getUsageColor: (u: number) => string;
-  getUsageBarColor: (u: number) => string;
+  setEditValue: (_v: string) => void;
+  getUsageColor: (_u: number) => string;
+  getUsageBarColor: (_u: number) => string;
 }) {
   const [activeTab, setActiveTab] = useState('basic');
   const statusInfo = statusMap[device.status];
@@ -589,11 +601,10 @@ function DeviceDetailView({
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 rounded-md text-xs whitespace-nowrap transition-all ${
-              activeTab === tab.key
-                ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-gray-200 border border-transparent'
-            }`}
+            className={`px-4 py-2 rounded-md text-xs whitespace-nowrap transition-all ${activeTab === tab.key
+              ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
+              : 'text-gray-400 hover:text-gray-200 border border-transparent'
+              }`}
             style={{ fontSize: '0.75rem' }}
           >
             {tab.label}
@@ -675,16 +686,16 @@ function DeviceDetailView({
         {activeTab === 'config' && (
           <FuturisticPanel title={isZh ? '配置信息' : 'Configuration'}>
             <pre className="text-xs text-gray-300 bg-black/30 p-4 rounded-lg overflow-auto font-mono" style={{ fontSize: '0.75rem' }}>
-{JSON.stringify({
-  name: device.name,
-  type: device.type,
-  endpoint: device.endpoint,
-  os: device.os,
-  hardware: { cpu: `${device.cpu} cores`, memory: `${device.memory} GB`, disk: `${device.disk} GB` },
-  network: { ip: device.ip, port: device.port },
-  location: device.location,
-  tags: device.tags,
-}, null, 2)}
+              {JSON.stringify({
+                name: device.name,
+                type: device.type,
+                endpoint: device.endpoint,
+                os: device.os,
+                hardware: { cpu: `${device.cpu} cores`, memory: `${device.memory} GB`, disk: `${device.disk} GB` },
+                network: { ip: device.ip, port: device.port },
+                location: device.location,
+                tags: device.tags,
+              }, null, 2)}
             </pre>
           </FuturisticPanel>
         )}
@@ -719,7 +730,7 @@ function DetailRow({
   editingField?: string | null;
   fieldKey?: string;
   editValue?: string;
-  setEditValue?: (v: string) => void;
+  setEditValue?: (_v: string) => void;
   onSave?: () => void;
 }) {
   const isEditing = editingField === fieldKey;
@@ -762,8 +773,8 @@ function UsageBar({
 }: {
   label: string;
   usage: number;
-  getColor: (u: number) => string;
-  getBarColor: (u: number) => string;
+  getColor: (_u: number) => string;
+  getBarColor: (_u: number) => string;
 }) {
   return (
     <div className="flex items-center gap-3">

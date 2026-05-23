@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
-import { motion } from 'motion/react';
+
 
 interface NeonBorderProps {
   children: ReactNode;
   color?: 'blue' | 'cyan' | 'purple' | 'green' | 'red' | 'orange';
   intensity?: 'low' | 'medium' | 'high';
-  animated?: boolean;
+  _animated?: boolean;
   className?: string;
 }
 
@@ -28,7 +28,7 @@ export function NeonBorder({
   children,
   color = 'blue',
   intensity = 'medium',
-  animated = false,
+  _animated = false,
   className = ''
 }: NeonBorderProps) {
   return (

@@ -1,10 +1,10 @@
-import { motion } from 'motion/react';
+
 
 interface StatusIndicatorProps {
   status: 'online' | 'offline' | 'warning' | 'error' | 'connecting';
   label?: string;
   size?: 'sm' | 'md' | 'lg';
-  animated?: boolean;
+  _animated?: boolean;
 }
 
 const statusConfig = {
@@ -25,7 +25,7 @@ export function StatusIndicator({
   status, 
   label, 
   size = 'md', 
-  animated = true 
+  _animated = true 
 }: StatusIndicatorProps) {
   const config = statusConfig[status];
   const displayLabel = label || config.label;

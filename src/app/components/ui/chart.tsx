@@ -22,6 +22,8 @@ type ChartContextProps = {
   config: ChartConfig;
 };
 
+type ChartRenderProp = (_width: number, _height: number) => React.ReactNode;
+
 const ChartContext = React.createContext<ChartContextProps | null>(null);
 
 function useChart() {
@@ -69,7 +71,7 @@ function ChartContainer({
   const chartChildren = React.useMemo(() => {
     if (dims.width <= 0 || dims.height <= 0) return null;
     if (typeof children === 'function') {
-      return (children as any)(dims.width, dims.height);
+      return (children as ChartRenderProp)(dims.width, dims.height);
     }
     if (React.isValidElement(children)) {
       return React.cloneElement(children as React.ReactElement<any>, {
@@ -118,13 +120,13 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
             ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
-  .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
-  })
-  .join("\n")}
+                .map(([key, itemConfig]) => {
+                  const color =
+                    itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
+                    itemConfig.color;
+                  return color ? `  --color-${key}: ${color};` : null;
+                })
+                .join("\n")}
 }
 `,
           )
@@ -348,8 +350,8 @@ function getPayloadConfigFromPayload(
 
   const payloadPayload =
     "payload" in payload &&
-    typeof payload.payload === "object" &&
-    payload.payload !== null
+      typeof payload.payload === "object" &&
+      payload.payload !== null
       ? payload.payload
       : undefined;
 
@@ -376,10 +378,8 @@ function getPayloadConfigFromPayload(
 }
 
 export {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
+  ChartContainer, ChartLegend,
   ChartLegendContent,
-  ChartStyle,
+  ChartStyle, ChartTooltip,
+  ChartTooltipContent
 };

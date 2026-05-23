@@ -16,7 +16,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  AlertTriangle, Settings, Save, RotateCcw, Cpu, HardDrive,
+  AlertTriangle, Save, RotateCcw, Cpu, HardDrive,
   MonitorSpeaker, Shield, Server, Bell, CheckCircle, Info,
   ChevronDown, Zap, Sliders, Globe, Lock, Unlock, RefreshCw
 } from 'lucide-react';
@@ -94,7 +94,7 @@ const DEFAULT_THRESHOLD: EndpointThreshold = { cpu: 85, memory: 85, disk: 80, al
 function ThresholdSlider({
   metric, value, onChange, disabled, isZh
 }: {
-  metric: MetricKey; value: number; onChange: (v: number) => void; disabled?: boolean; isZh: boolean;
+  metric: MetricKey; value: number; onChange: (_v: number) => void; disabled?: boolean; isZh: boolean;
 }) {
   const info = METRIC_INFO[metric];
   const pct = ((value - info.min) / (info.max - info.min)) * 100;
@@ -182,7 +182,7 @@ function EndpointThresholdCard({
 }: {
   endpointKey: 'max' | 'nas' | 'ecs';
   threshold: EndpointThreshold;
-  onChange: (key: MetricKey, value: number) => void;
+  onChange: (_key: MetricKey, _value: number) => void;
   isZh: boolean;
   isGlobal: boolean;
 }) {

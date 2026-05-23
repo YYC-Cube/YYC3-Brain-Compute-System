@@ -4,8 +4,7 @@ import {
   Search, Command, LayoutDashboard, BookOpen, Activity, Cpu, Server,
   Network, Shield, Settings, HardDrive, Monitor, FileText, Key,
   Target, Crosshair, Wrench, FlaskConical, Brain, FolderOpen,
-  ArrowRight, ChevronRight, Zap, Hash, Clock, Keyboard,
-  AlertTriangle, RefreshCw, Play, Download, Trash2, Sparkles
+  ArrowRight, AlertTriangle, RefreshCw, Play, Download, Trash2, Sparkles
 } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
@@ -25,7 +24,7 @@ interface CommandItem {
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate: (module: string) => void;
+  onNavigate: (_module: string) => void;
 }
 
 // ===== Component =====
@@ -270,7 +269,7 @@ export function CommandPalette({ isOpen, onClose, onNavigate }: CommandPalettePr
 }
 
 // ===== Global Keyboard Hook =====
-export function useGlobalShortcuts(onNavigate: (module: string) => void) {
+export function useGlobalShortcuts(onNavigate: (_module: string) => void) {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
   useEffect(() => {

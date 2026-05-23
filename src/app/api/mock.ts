@@ -1,17 +1,31 @@
 /**
  * YYC³ API — Mock 拦截器
- * 
+ *
  * TEST_MODE=true 时拦截所有 API 调用，返回 mock 数据
  * 切换至真实后端: 将 config.ts 中 TEST_MODE 设为 false
  */
 
 import { API_CONFIG } from './config';
 import type {
-  ApiResponse, PaginatedResponse, Device, AuditLog, MonitorOverview,
-  MonitorAlert, PatrolReport, PatrolCheck, AlertDetail, OperationChainItem,
-  AIAnalysisResult, Role, User, OperationTemplate, OperationLog, FileNode,
-  ScriptTemplate, ScriptExecution, IDENodeStatus, BatchJob,
+  AlertDetail,
+  ApiResponse,
+  AuditLog,
+  Device,
+  FileNode,
+  IDENodeStatus,
+  OperationLog,
+  PaginatedResponse,
+  PatrolCheck,
+  Role,
+  ScriptExecution,
+  ScriptTemplate,
+  User
 } from './types';
+
+type MockHandler = (_params?: Record<string, string>, _body?: unknown) => Promise<unknown>;
+interface _MockApiHandlers {
+  [key: string]: MockHandler;
+}
 
 // ===== Mock 延迟模拟 =====
 function delay(ms: number = 300): Promise<void> {
@@ -75,31 +89,39 @@ const USERS: User[] = [
 
 const ROLES: Role[] = [
   { id: 'super_admin', name: '超级管理员', nameEn: 'Super Admin', description: '系统最高权限', descriptionEn: 'Highest system authority', userCount: 1, permissions: ['*'], color: 'from-red-500 to-orange-500' },
-  { id: 'system_admin', name: '系统管理员', nameEn: 'System Admin', description: '日常运维管理', descriptionEn: 'Daily operations', userCount: 2, permissions: ['device:read','device:write','device:create','device:delete','config:read','config:write','monitor:read','audit:read'], color: 'from-blue-500 to-cyan-500' },
-  { id: 'security_admin', name: '安全管理员', nameEn: 'Security Admin', description: '安全策略管理', descriptionEn: 'Security policy', userCount: 1, permissions: ['device:read','config:read','config:write:security','monitor:read','audit:read','audit:export'], color: 'from-purple-500 to-pink-500' },
-  { id: 'auditor', name: '审计人员', nameEn: 'Auditor', description: '操作审计', descriptionEn: 'Operation audit', userCount: 1, permissions: ['device:read','monitor:read','audit:read','audit:export'], color: 'from-green-500 to-emerald-500' },
-  { id: 'business_owner', name: '业务负责人', nameEn: 'Business Owner', description: '业务需求管理', descriptionEn: 'Business management', userCount: 1, permissions: ['device:read','monitor:read','change:request','change:approve'], color: 'from-amber-500 to-yellow-500' },
-  { id: 'user', name: '普通用户', nameEn: 'User', description: '基础查看', descriptionEn: 'Basic view', userCount: 1, permissions: ['device:read','monitor:read'], color: 'from-gray-400 to-gray-500' },
+  { id: 'system_admin', name: '系统管理员', nameEn: 'System Admin', description: '日常运维管理', descriptionEn: 'Daily operations', userCount: 2, permissions: ['device:read', 'device:write', 'device:create', 'device:delete', 'config:read', 'config:write', 'monitor:read', 'audit:read'], color: 'from-blue-500 to-cyan-500' },
+  { id: 'security_admin', name: '安全管理员', nameEn: 'Security Admin', description: '安全策略管理', descriptionEn: 'Security policy', userCount: 1, permissions: ['device:read', 'config:read', 'config:write:security', 'monitor:read', 'audit:read', 'audit:export'], color: 'from-purple-500 to-pink-500' },
+  { id: 'auditor', name: '审计人员', nameEn: 'Auditor', description: '操作审计', descriptionEn: 'Operation audit', userCount: 1, permissions: ['device:read', 'monitor:read', 'audit:read', 'audit:export'], color: 'from-green-500 to-emerald-500' },
+  { id: 'business_owner', name: '业务负责人', nameEn: 'Business Owner', description: '业务需求管理', descriptionEn: 'Business management', userCount: 1, permissions: ['device:read', 'monitor:read', 'change:request', 'change:approve'], color: 'from-amber-500 to-yellow-500' },
+  { id: 'user', name: '普通用户', nameEn: 'User', description: '基础查看', descriptionEn: 'Basic view', userCount: 1, permissions: ['device:read', 'monitor:read'], color: 'from-gray-400 to-gray-500' },
 ];
 
 // --- Alerts ---
 const ALERTS: AlertDetail[] = [
-  { id: 'ALT-001', level: 'critical', title: 'GPU推理延迟异常', titleEn: 'GPU Inference Latency Anomaly', device: 'NAS-Tensor-Inference', deviceId: 'DEV-012', metric: 'CPU Usage', value: '95%', threshold: '>90%', timestamp: '2026-02-25 14:24:15', status: 'active', assignee: '张三', chain: [
-    { time: '14:20:00', event: '模型加载 Embedding v2.2', eventEn: 'Model loaded Embedding v2.2', type: 'action' },
-    { time: '14:22:30', event: '推理任务 #12847 启动', eventEn: 'Inference task #12847 started', type: 'action' },
-    { time: '14:24:15', event: 'CPU使用率突增至95%', eventEn: 'CPU spiked to 95%', type: 'trigger', highlight: true },
-    { time: '14:24:30', event: '系统自动降低并发', eventEn: 'Auto-reduced concurrency', type: 'auto' },
-  ]},
-  { id: 'ALT-002', level: 'warning', title: '数据库连接数接近上限', titleEn: 'DB connections near limit', device: 'yyc3_prod', deviceId: 'DEV-006', metric: 'Connections', value: '450/500', threshold: '>400', timestamp: '2026-02-25 14:16:00', status: 'acknowledged', assignee: '张三', chain: [
-    { time: '14:10:00', event: '连接数开始上升', eventEn: 'Connections rising', type: 'trigger' },
-    { time: '14:16:00', event: '连接数达450', eventEn: 'Connections at 450', type: 'trigger', highlight: true },
-  ]},
-  { id: 'ALT-003', level: 'warning', title: 'NAS磁盘使用率过高', titleEn: 'NAS disk usage high', device: 'NAS-Server-Core', deviceId: 'DEV-002', metric: 'Disk Usage', value: '73%', threshold: '>70%', timestamp: '2026-02-25 13:45:00', status: 'acknowledged', assignee: '李四', chain: [
-    { time: '13:45:00', event: '磁盘使用率突破阈值', eventEn: 'Disk usage exceeded threshold', type: 'trigger', highlight: true },
-  ]},
-  { id: 'ALT-004', level: 'info', title: 'SSL证书即将过期', titleEn: 'SSL cert expiring', device: 'yyc3-125-ECS', deviceId: 'DEV-003', metric: 'SSL Expiry', value: '30天', threshold: '<30天', timestamp: '2026-02-25 12:00:00', status: 'resolved', assignee: '系统', chain: [
-    { time: '12:00:00', event: 'SSL证书检查', eventEn: 'SSL cert check', type: 'trigger', highlight: true },
-  ]},
+  {
+    id: 'ALT-001', level: 'critical', title: 'GPU推理延迟异常', titleEn: 'GPU Inference Latency Anomaly', device: 'NAS-Tensor-Inference', deviceId: 'DEV-012', metric: 'CPU Usage', value: '95%', threshold: '>90%', timestamp: '2026-02-25 14:24:15', status: 'active', assignee: '张三', chain: [
+      { time: '14:20:00', event: '模型加载 Embedding v2.2', eventEn: 'Model loaded Embedding v2.2', type: 'action' },
+      { time: '14:22:30', event: '推理任务 #12847 启动', eventEn: 'Inference task #12847 started', type: 'action' },
+      { time: '14:24:15', event: 'CPU使用率突增至95%', eventEn: 'CPU spiked to 95%', type: 'trigger', highlight: true },
+      { time: '14:24:30', event: '系统自动降低并发', eventEn: 'Auto-reduced concurrency', type: 'auto' },
+    ]
+  },
+  {
+    id: 'ALT-002', level: 'warning', title: '数据库连接数接近上限', titleEn: 'DB connections near limit', device: 'yyc3_prod', deviceId: 'DEV-006', metric: 'Connections', value: '450/500', threshold: '>400', timestamp: '2026-02-25 14:16:00', status: 'acknowledged', assignee: '张三', chain: [
+      { time: '14:10:00', event: '连接数开始上升', eventEn: 'Connections rising', type: 'trigger' },
+      { time: '14:16:00', event: '连接数达450', eventEn: 'Connections at 450', type: 'trigger', highlight: true },
+    ]
+  },
+  {
+    id: 'ALT-003', level: 'warning', title: 'NAS磁盘使用率过高', titleEn: 'NAS disk usage high', device: 'NAS-Server-Core', deviceId: 'DEV-002', metric: 'Disk Usage', value: '73%', threshold: '>70%', timestamp: '2026-02-25 13:45:00', status: 'acknowledged', assignee: '李四', chain: [
+      { time: '13:45:00', event: '磁盘使用率突破阈值', eventEn: 'Disk usage exceeded threshold', type: 'trigger', highlight: true },
+    ]
+  },
+  {
+    id: 'ALT-004', level: 'info', title: 'SSL证书即将过期', titleEn: 'SSL cert expiring', device: 'yyc3-125-ECS', deviceId: 'DEV-003', metric: 'SSL Expiry', value: '30天', threshold: '<30天', timestamp: '2026-02-25 12:00:00', status: 'resolved', assignee: '系统', chain: [
+      { time: '12:00:00', event: 'SSL证书检查', eventEn: 'SSL cert check', type: 'trigger', highlight: true },
+    ]
+  },
 ];
 
 // --- Operation Logs ---
@@ -169,7 +191,7 @@ export const mockApi = {
         { name: 'NAS端', cpu: 45, memory: 62, disk: 73, devices: 4 },
         { name: 'ECS端', cpu: 25, memory: 56, disk: 51, devices: 3 },
       ],
-    } as MonitorOverview);
+    });
   },
 
   'GET /monitor/realtime': async () => {
@@ -213,7 +235,7 @@ export const mockApi = {
   'GET /permissions/users': async () => { await delay(); return ok(USERS); },
   'GET /permissions/matrix': async () => {
     await delay();
-    const features = ['设备信息查看','设备信息编辑','设备新增','设备退役','配置变更','实时监控查看','告警处理','操作审计查看','审计报告导出','用户管理'];
+    const features = ['设备信息查看', '设备信息编辑', '设备新增', '设备退役', '配置变更', '实时监控查看', '告警处理', '操作审计查看', '审计报告导出', '用户管理'];
     const roles = ROLES.map(r => r.id);
     const matrix: Record<string, Record<string, boolean>> = {};
     features.forEach(f => {
@@ -237,7 +259,7 @@ export const mockApi = {
       { id: 'PC-004', category: '网络', categoryEn: 'Network', name: 'ECS 节点延迟', nameEn: 'ECS node latency', status: 'fail', value: '120ms', threshold: '<100ms', detail: '超过阈值', detailEn: 'Exceeded' },
       { id: 'PC-005', category: '安全', categoryEn: 'Security', name: 'SSL 证书有效期', nameEn: 'SSL cert validity', status: 'warning', value: '30天', threshold: '>60天', detail: '即将过期', detailEn: 'Expiring soon' },
     ];
-    return ok({ id: 'PR-001', timestamp: new Date().toISOString(), type: 'auto', healthScore: 88, totalChecks: 12, passed: 9, warnings: 2, failures: 1, checks } as PatrolReport);
+    return ok({ id: 'PR-001', timestamp: new Date().toISOString(), type: 'auto', healthScore: 88, totalChecks: 12, passed: 9, warnings: 2, failures: 1, checks });
   },
 
   'POST /patrol/run': async () => { await delay(2000); return ok({ taskId: `PATROL-${Date.now()}`, status: 'completed' }); },
@@ -278,7 +300,7 @@ export const mockApi = {
       ],
       overallScore: 79,
       analyzedAt: new Date().toISOString(),
-    } as AIAnalysisResult);
+    });
   },
 
   'POST /ai/analyze': async () => { await delay(2500); return ok({ taskId: `AI-${Date.now()}`, status: 'completed' }); },
@@ -287,23 +309,35 @@ export const mockApi = {
   'GET /files/tree': async () => {
     await delay();
     return ok([
-      { name: 'logs', path: '/logs', type: 'folder', children: [
-        { name: 'node', path: '/logs/node', type: 'folder', children: [
-          { name: 'GPU-A100-01', path: '/logs/node/GPU-A100-01', type: 'folder', children: [
-            { name: 'inference.log', path: '/logs/node/GPU-A100-01/inference.log', type: 'file', size: 2400000, sizeFormatted: '2.3MB', modified: '2分钟前' },
-            { name: 'error.log', path: '/logs/node/GPU-A100-01/error.log', type: 'file', size: 467000, sizeFormatted: '456KB', modified: '5分钟前' },
-          ]},
-        ]},
-      ]},
-      { name: 'configs', path: '/configs', type: 'folder', children: [
-        { name: 'patrol.json', path: '/configs/patrol.json', type: 'file', size: 4300, sizeFormatted: '4.2KB', modified: '3小时前' },
-        { name: 'alerts.json', path: '/configs/alerts.json', type: 'file', size: 3900, sizeFormatted: '3.8KB', modified: '1天前' },
-      ]},
-      { name: 'cache', path: '/cache', type: 'folder', children: [
-        { name: 'queries', path: '/cache/queries', type: 'folder', children: [
-          { name: 'result-cache.db', path: '/cache/queries/result-cache.db', type: 'file', size: 24000000, sizeFormatted: '23MB', modified: '刚刚' },
-        ]},
-      ]},
+      {
+        name: 'logs', path: '/logs', type: 'folder', children: [
+          {
+            name: 'node', path: '/logs/node', type: 'folder', children: [
+              {
+                name: 'GPU-A100-01', path: '/logs/node/GPU-A100-01', type: 'folder', children: [
+                  { name: 'inference.log', path: '/logs/node/GPU-A100-01/inference.log', type: 'file', size: 2400000, sizeFormatted: '2.3MB', modified: '2分钟前' },
+                  { name: 'error.log', path: '/logs/node/GPU-A100-01/error.log', type: 'file', size: 467000, sizeFormatted: '456KB', modified: '5分钟前' },
+                ]
+              },
+            ]
+          },
+        ]
+      },
+      {
+        name: 'configs', path: '/configs', type: 'folder', children: [
+          { name: 'patrol.json', path: '/configs/patrol.json', type: 'file', size: 4300, sizeFormatted: '4.2KB', modified: '3小时前' },
+          { name: 'alerts.json', path: '/configs/alerts.json', type: 'file', size: 3900, sizeFormatted: '3.8KB', modified: '1天前' },
+        ]
+      },
+      {
+        name: 'cache', path: '/cache', type: 'folder', children: [
+          {
+            name: 'queries', path: '/cache/queries', type: 'folder', children: [
+              { name: 'result-cache.db', path: '/cache/queries/result-cache.db', type: 'file', size: 24000000, sizeFormatted: '23MB', modified: '刚刚' },
+            ]
+          },
+        ]
+      },
     ] as FileNode[]);
   },
 
@@ -367,7 +401,7 @@ export const mockApi = {
         return { output: 'patrol.interval = 15\nnotification.email = admin@yyc3.local\nalert.threshold.cpu = 80\nalert.threshold.memory = 80\nalert.threshold.disk = 70\nmonitor.interval = 5000\nws.reconnect.max = 5', outputType: 'text' };
       },
       'report': () => ({
-        output: `Generating performance report...\n  Period:   Last 24 hours\n  Format:   JSON\n  Metrics:  CPU, Memory, Disk, Network\n  Devices:  12\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  Report saved to: ./reports/perf-${new Date().toISOString().slice(0,10)}.json\n  Size: 245KB`,
+        output: `Generating performance report...\n  Period:   Last 24 hours\n  Format:   JSON\n  Metrics:  CPU, Memory, Disk, Network\n  Devices:  12\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  Report saved to: ./reports/perf-${new Date().toISOString().slice(0, 10)}.json\n  Size: 245KB`,
         outputType: 'success'
       }),
       'help': () => ({
@@ -495,7 +529,7 @@ export const mockApi = {
       output: ['Starting execution...', 'Checking nodes...'],
       progress: 30,
       operator: 'admin',
-    } as ScriptExecution);
+    });
   },
 
   'GET /scripts/executions': async () => {
@@ -519,7 +553,7 @@ export const mockApi = {
       status: 'running',
       progress: 0,
       results: [],
-    } as BatchJob);
+    });
   },
 
   // ============================================================
@@ -677,9 +711,16 @@ export const mockApi = {
       }));
     };
 
-    const computeSummary = (thisW: any[], lastW: any[]) => {
-      const avg = (arr: any[], key: string) => arr.reduce((s: number, d: any) => s + d[key], 0) / arr.length;
-      const sum = (arr: any[], key: string) => arr.reduce((s: number, d: any) => s + d[key], 0);
+    interface PeriodDataPoint {
+      cpu: number
+      memory: number
+      disk: number
+      alerts: number
+    }
+
+    const computeSummary = (thisW: PeriodDataPoint[], lastW: PeriodDataPoint[]) => {
+      const avg = (arr: PeriodDataPoint[], key: keyof PeriodDataPoint) => arr.reduce((s, d) => s + d[key], 0) / arr.length;
+      const sum = (arr: PeriodDataPoint[], key: keyof PeriodDataPoint) => arr.reduce((s, d) => s + d[key], 0);
       return {
         cpuAvgThis: avg(thisW, 'cpu'), cpuAvgLast: avg(lastW, 'cpu'),
         memoryAvgThis: avg(thisW, 'memory'), memoryAvgLast: avg(lastW, 'memory'),
@@ -714,13 +755,13 @@ export const mockApi = {
       },
       overallTrend: {
         cpu: getTrend((maxSummary.cpuAvgThis + nasSummary.cpuAvgThis + ecsSummary.cpuAvgThis) / 3,
-                      (maxSummary.cpuAvgLast + nasSummary.cpuAvgLast + ecsSummary.cpuAvgLast) / 3),
+          (maxSummary.cpuAvgLast + nasSummary.cpuAvgLast + ecsSummary.cpuAvgLast) / 3),
         memory: getTrend((maxSummary.memoryAvgThis + nasSummary.memoryAvgThis + ecsSummary.memoryAvgThis) / 3,
-                         (maxSummary.memoryAvgLast + nasSummary.memoryAvgLast + ecsSummary.memoryAvgLast) / 3),
+          (maxSummary.memoryAvgLast + nasSummary.memoryAvgLast + ecsSummary.memoryAvgLast) / 3),
         disk: getTrend((maxSummary.diskAvgThis + nasSummary.diskAvgThis + ecsSummary.diskAvgThis) / 3,
-                       (maxSummary.diskAvgLast + nasSummary.diskAvgLast + ecsSummary.diskAvgLast) / 3),
+          (maxSummary.diskAvgLast + nasSummary.diskAvgLast + ecsSummary.diskAvgLast) / 3),
         alerts: getTrend((maxSummary.alertsThis + nasSummary.alertsThis + ecsSummary.alertsThis) / 3,
-                         (maxSummary.alertsLast + nasSummary.alertsLast + ecsSummary.alertsLast) / 3),
+          (maxSummary.alertsLast + nasSummary.alertsLast + ecsSummary.alertsLast) / 3),
       },
       insights: [
         { zh: 'ECS端 CPU/内存使用率周环比分别上升 12.8% 和 11.0%，建议本周内完成扩容评估', en: 'ECS CPU/memory WoW increase 12.8%/11.0%, recommend scaling assessment this week' },
@@ -747,9 +788,9 @@ export const mockApi = {
     });
   },
 
-  'PUT /monitor/thresholds': async (_: any, data: any) => {
+  'PUT /monitor/thresholds': async (_params: Record<string, string>, data: unknown) => {
     await delay(500);
-    return ok({ ...data, updatedAt: new Date().toISOString(), updatedBy: 'admin' });
+    return ok({ ...(data as Record<string, unknown>), updatedAt: new Date().toISOString(), updatedBy: 'admin' });
   },
 };
 
@@ -758,10 +799,12 @@ export function isMockMode(): boolean {
   return API_CONFIG.TEST_MODE;
 }
 
-export function getMockHandler(method: string, path: string): ((params?: any, body?: any) => Promise<any>) | null {
+export function getMockHandler(method: string, path: string): MockHandler | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const _handlers = mockApi as any;
   // Direct match
   const key = `${method} ${path}`;
-  if ((mockApi as any)[key]) return (mockApi as any)[key];
+  if (_handlers[key]) return _handlers[key];
 
   // Pattern match for :id style routes
   for (const routeKey of Object.keys(mockApi)) {

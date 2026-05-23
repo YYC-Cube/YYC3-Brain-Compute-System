@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Power, Shield, Settings, Scan, PlayCircle, PauseCircle } from 'lucide-react';
+import { Power, Shield, Settings, Scan, PlayCircle } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';

@@ -9,6 +9,16 @@
  * tags: [performance],[monitoring],[web-vitals]
  */
 
+interface LayoutShiftEntry extends PerformanceEntry {
+  value: number
+  hadRecentInput: boolean
+}
+
+interface FirstInputEntry extends PerformanceEntry {
+  processingStart: number
+  startTime: number
+}
+
 interface Metric {
   name: string
   value: number
@@ -18,7 +28,7 @@ interface Metric {
   timestamp: number
 }
 
-type MetricCallback = (metric: Metric) => void
+type MetricCallback = (_metric: Metric) => void
 
 function observeLCP(callback: MetricCallback) {
   try {
@@ -45,8 +55,9 @@ function observeCLS(callback: MetricCallback) {
     let value = 0
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (!(entry as any).hadRecentInput) {
-          value += (entry as any).value
+        const layoutEntry = entry as LayoutShiftEntry
+        if (!layoutEntry.hadRecentInput) {
+          value += layoutEntry.value
         }
       }
       callback({
@@ -66,11 +77,13 @@ function observeFID(callback: MetricCallback) {
   try {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
+        const inputEntry = entry as FirstInputEntry
+        const fidValue = inputEntry.processingStart - inputEntry.startTime
         callback({
           name: 'FID',
-          value: (entry as any).processingStart - entry.startTime,
-          rating: (entry as any).processingStart - entry.startTime <= 100 ? 'good' : (entry as any).processingStart - entry.startTime <= 300 ? 'needs-improvement' : 'poor',
-          delta: (entry as any).processingStart - entry.startTime,
+          value: fidValue,
+          rating: fidValue <= 100 ? 'good' : fidValue <= 300 ? 'needs-improvement' : 'poor',
+          delta: fidValue,
           navigationType: performance.navigation.type.toString(),
           timestamp: Date.now(),
         })
@@ -102,8 +115,8 @@ export function reportWebVitals(onMetric?: MetricCallback) {
     if (onMetric) {
       onMetric(metric)
     }
-    if (typeof console !== 'undefined' && console.log) {
-      console.log(`[WebVitals] ${metric.name}: ${metric.value.toFixed(2)}ms (${metric.rating})`)
+    if (typeof console !== 'undefined') {
+// [REMOVED] console.log(`[WebVitals] ${metric.name}: ${metric.value.toFixed(2)}ms (${metric.rating})`)
     }
   }
 

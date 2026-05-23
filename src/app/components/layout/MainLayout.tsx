@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 import { useIsMobile } from '../ui/use-mobile';
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import { useTheme } from '../ThemeContext';
 
 interface MainLayoutProps {
   children: React.ReactNode;
   activeModule: string;
-  setActiveModule: (id: string) => void;
+  setActiveModule: (_id: string) => void;
   onOpenCommandPalette?: () => void;
 }
 

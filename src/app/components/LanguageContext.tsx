@@ -15,11 +15,31 @@
  */
 
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 type Language = 'zh' | 'en';
 
 const LANGUAGE_STORAGE_KEY = 'yyc3_language';
+
+class SimpleI18n {
+  private locale = 'zh-CN';
+  private translations: Record<string, Record<string, string>> = {};
+
+  registerTranslation(locale: string, data: Record<string, string>) {
+    this.translations[locale] = data;
+  }
+
+  setLocale(locale: string): Promise<void> {
+    this.locale = locale;
+    return Promise.resolve();
+  }
+
+  t(key: string): string {
+    return this.translations[this.locale]?.[key] || '';
+  }
+}
+
+const i18nEngine = new SimpleI18n();
 
 interface Translations {
   [key: string]: {
@@ -118,8 +138,8 @@ const translations: Translations = {
 
 interface LanguageContextType {
   language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  setLanguage: (_lang: Language) => void;
+  t: (_key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -128,22 +148,32 @@ function getStoredLanguage(): Language {
   try {
     const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (stored === 'zh' || stored === 'en') return stored;
-  } catch {}
+  } catch { }
   return 'zh';
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(getStoredLanguage);
 
+  useEffect(() => {
+    const locale = language === 'zh' ? 'zh-CN' : 'en';
+    i18nEngine.setLocale(locale).catch(console.error);
+  }, [language]);
+
+  useEffect(() => {
+    i18nEngine.registerTranslation('zh-CN', translations.zh);
+    i18nEngine.registerTranslation('en', translations.en);
+  }, []);
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     try {
       localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
-    } catch {}
+    } catch { }
   };
 
   const t = (key: string) => {
-    return translations[language][key] || key;
+    return i18nEngine.t(key) || key;
   };
 
   return (

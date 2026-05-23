@@ -8,8 +8,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiError, apiClient } from './client';
 import { API_CONFIG } from './config';
-import { wsManager } from './websocket';
 import { getMockHandler, isMockMode } from './mock';
+import { wsManager } from './websocket';
 
 // ===== 通用请求 Hook =====
 interface UseApiState<T> {
@@ -20,7 +20,7 @@ interface UseApiState<T> {
 
 interface UseApiReturn<T> extends UseApiState<T> {
   refetch: () => Promise<void>;
-  mutate: (data: T) => void;
+  mutate: (_data: T) => void;
 }
 
 /**
@@ -32,12 +32,13 @@ interface UseApiReturn<T> extends UseApiState<T> {
 export function useApi<T>(
   method: string,
   path: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: Record<string, any>,
   options?: {
     immediate?: boolean;
-    deps?: any[];
-    onSuccess?: (data: T) => void;
-    onError?: (error: string) => void;
+    deps?: unknown[];
+    onSuccess?: (_data: T) => void;
+    onError?: (_error: string) => void;
   }
 ): UseApiReturn<T> {
   const { immediate = true, deps = [], onSuccess, onError } = options || {};
@@ -60,6 +61,7 @@ export function useApi<T>(
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let result: any;
 
       if (isMockMode()) {
@@ -91,9 +93,9 @@ export function useApi<T>(
       const data = result?.data !== undefined ? result.data : result;
       setState({ data, loading: false, error: null });
       onSuccess?.(data);
-    } catch (err: any) {
-      if (err.name === 'AbortError') return;
-      const errorMsg = err instanceof ApiError ? err.messageZh : err.message || '请求失败';
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') return;
+      const errorMsg = err instanceof ApiError ? err.messageZh : err instanceof Error ? err.message : '请求失败';
       setState((prev) => ({ ...prev, loading: false, error: errorMsg }));
       onError?.(errorMsg);
     }
@@ -121,15 +123,15 @@ interface UsePaginatedReturn<T> {
   loading: boolean;
   error: string | null;
   pagination: { page: number; pageSize: number; total: number; totalPages: number };
-  setPage: (page: number) => void;
-  setPageSize: (size: number) => void;
+  setPage: (_page: number) => void;
+  setPageSize: (_size: number) => void;
   refetch: () => Promise<void>;
 }
 
 export function usePaginatedApi<T>(
   path: string,
   params?: Record<string, any>,
-  options?: { pageSize?: number; deps?: any[] }
+  options?: { pageSize?: number; deps?: unknown[] }
 ): UsePaginatedReturn<T> {
   const { pageSize: initialPageSize = 20, deps = [] } = options || {};
   const [page, setPage] = useState(1);
@@ -185,7 +187,7 @@ export function usePolling<T>(
 
 // ===== Mutation Hook =====
 interface UseMutationReturn<TInput, TOutput> {
-  mutate: (input: TInput) => Promise<TOutput | null>;
+  mutate: (_input: TInput) => Promise<TOutput | null>;
   loading: boolean;
   error: string | null;
   data: TOutput | null;
@@ -193,10 +195,10 @@ interface UseMutationReturn<TInput, TOutput> {
 
 export function useMutation<TInput, TOutput>(
   method: string,
-  path: string | ((input: TInput) => string),
+  path: string | ((_input: TInput) => string),
   options?: {
-    onSuccess?: (data: TOutput) => void;
-    onError?: (error: string) => void;
+    onSuccess?: (_data: TOutput) => void;
+    onError?: (_error: string) => void;
   }
 ): UseMutationReturn<TInput, TOutput> {
   const [state, setState] = useState<{ loading: boolean; error: string | null; data: TOutput | null }>({
@@ -210,13 +212,14 @@ export function useMutation<TInput, TOutput>(
       setState({ loading: true, error: null, data: null });
 
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let result: any;
         const resolvedPath = typeof path === 'function' ? path(input) : path;
 
         if (isMockMode()) {
           const handler = getMockHandler(method, resolvedPath);
           if (handler) {
-            result = await handler(input);
+            result = await handler(input as Record<string, string>);
           } else {
             throw new Error(`No mock handler for ${method} ${resolvedPath}`);
           }
@@ -241,8 +244,8 @@ export function useMutation<TInput, TOutput>(
         setState({ loading: false, error: null, data });
         options?.onSuccess?.(data);
         return data;
-      } catch (err: any) {
-        const errorMsg = err instanceof ApiError ? err.messageZh : err.message || '操作失败';
+      } catch (err: unknown) {
+        const errorMsg = err instanceof ApiError ? err.messageZh : err instanceof Error ? err.message : '操作失败';
         setState({ loading: false, error: errorMsg, data: null });
         options?.onError?.(errorMsg);
         return null;
@@ -255,7 +258,17 @@ export function useMutation<TInput, TOutput>(
 }
 
 // ===== WebSocket Hook =====
-export function useWebSocket(type: string, handler: (payload: any) => void) {
+interface WSPayload {
+  cpu?: number;
+  memory?: number;
+  disk?: number;
+  networkIn?: number;
+  networkOut?: number;
+  alerts?: number;
+  [key: string]: unknown;
+}
+
+export function useWebSocket(type: string, handler: (_payload: WSPayload) => void) {
   useEffect(() => {
     if (isMockMode()) {
       // Mock 模式: 模拟 WebSocket 推送
@@ -287,7 +300,7 @@ export function useWebSocket(type: string, handler: (payload: any) => void) {
 
     // 生产模式: 真实 WebSocket
     // 由 wsManager 统一管理，这里仅做订阅
-    const unsubscribe = wsManager.on(type, (msg: any) => handler(msg.payload));
+    const unsubscribe = wsManager.on(type, (msg) => handler(msg.payload as WSPayload));
     return () => {
       if (typeof unsubscribe === 'function') unsubscribe();
     };

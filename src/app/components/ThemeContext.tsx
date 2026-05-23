@@ -549,28 +549,28 @@ function injectFontFace(font: CustomFont) {
 // ===== 主题 Context =====
 interface ThemeContextType {
   currentTheme: ThemeConfig;
-  setTheme: (theme: ThemeConfig) => void;
-  applyPreset: (presetId: string) => void;
-  updateColors: (colors: Partial<ThemeColors>) => void;
-  updateForeground: (fg: Partial<ThemeColorsForeground>) => void;
-  updateFonts: (fonts: Partial<ThemeFonts>) => void;
-  updateLayout: (layout: Partial<ThemeLayout>) => void;
-  updateBranding: (branding: Partial<ThemeBranding>) => void;
-  updateBackground: (bg: Partial<ThemeBackground>) => void;
+  setTheme: (_theme: ThemeConfig) => void;
+  applyPreset: (_presetId: string) => void;
+  updateColors: (_colors: Partial<ThemeColors>) => void;
+  updateForeground: (_fg: Partial<ThemeColorsForeground>) => void;
+  updateFonts: (_fonts: Partial<ThemeFonts>) => void;
+  updateLayout: (_layout: Partial<ThemeLayout>) => void;
+  updateBranding: (_branding: Partial<ThemeBranding>) => void;
+  updateBackground: (_bg: Partial<ThemeBackground>) => void;
   exportTheme: () => string;
-  importTheme: (json: string) => boolean;
+  importTheme: (_json: string) => boolean;
   resetToDefault: () => void;
   themeHistory: ThemeConfig[];
   undoTheme: () => void;
   // Font upload
   customFonts: CustomFont[];
-  uploadFont: (file: File, tier: 'sans' | 'serif' | 'mono') => Promise<boolean>;
-  removeFont: (id: string) => Promise<void>;
+  uploadFont: (_file: File, _tier: 'sans' | 'serif' | 'mono') => Promise<boolean>;
+  removeFont: (_id: string) => Promise<void>;
   // Snapshots / versioning
   snapshots: ThemeSnapshot[];
-  createSnapshot: (name: string) => void;
-  restoreSnapshot: (id: string) => void;
-  deleteSnapshot: (id: string) => void;
+  createSnapshot: (_name: string) => void;
+  restoreSnapshot: (_id: string) => void;
+  deleteSnapshot: (_id: string) => void;
 }
 
 const STORAGE_KEY = 'yyc3_theme_config';

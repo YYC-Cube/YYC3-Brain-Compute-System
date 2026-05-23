@@ -107,6 +107,9 @@ importers:
       '@sentry/react':
         specifier: ^10.53.1
         version: 10.53.1(react@18.3.1)
+      '@yyc3/i18n-core':
+        specifier: ^2.4.0
+        version: 2.4.0
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -2545,6 +2548,15 @@ packages:
 
   '@xtuc/long@4.2.2':
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
+
+  '@yyc3/i18n-core@2.4.0':
+    resolution: {integrity: sha512-46d9HCNX3MD2lVk3InKbwTItayxq9my4edud9Ujo9k+lyOORKpJmdxPCthUG//5tKxaicJEWB5V0VKKuPRnR8Q==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      lit: ^3.0.0
+    peerDependenciesMeta:
+      lit:
+        optional: true
 
   acorn-import-attributes@1.9.5:
     resolution: {integrity: sha512-n02Vykv5uA3eHGM/Z2dQrcD56kL8TyDb2p1+0P83PClMnC/nc+anbQRhIOWnSq4Ke/KvDPrY3C9hDtC/A3eHnQ==}
@@ -6648,6 +6660,8 @@ snapshots:
   '@xtuc/ieee754@1.2.0': {}
 
   '@xtuc/long@4.2.2': {}
+
+  '@yyc3/i18n-core@2.4.0': {}
 
   acorn-import-attributes@1.9.5(acorn@8.16.0):
     dependencies:

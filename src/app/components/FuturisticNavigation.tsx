@@ -25,12 +25,12 @@ interface NavigationItem {
 }
 
 interface FuturisticNavigationProps {
-  onNavigate?: (id: string) => void;
+  onNavigate?: (_id: string) => void;
   currentView?: string;
   isMobile?: boolean;
 }
 
-export function FuturisticNavigation({ onNavigate, currentView, isMobile }: FuturisticNavigationProps) {
+export function FuturisticNavigation({ onNavigate, currentView }: FuturisticNavigationProps) {
   const [activeItem, setActiveItem] = useState(currentView || 'dashboard');
   const { t } = useLanguage();
 
@@ -75,7 +75,7 @@ export function FuturisticNavigation({ onNavigate, currentView, isMobile }: Futu
         </motion.div>
 
         <div className="space-y-2">
-          {navigationItems.map((item, index) => (
+          {navigationItems.map((item, _index) => (
             <div key={item.id}>
               <HexagonalButton
                 active={activeItem === item.id}

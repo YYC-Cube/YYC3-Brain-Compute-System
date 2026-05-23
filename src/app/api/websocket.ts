@@ -8,8 +8,8 @@
 import { API_CONFIG } from './config';
 import type { WSMessage } from './types';
 
-type MessageHandler = (message: WSMessage) => void;
-type StatusHandler = (status: 'connecting' | 'connected' | 'disconnected' | 'error') => void;
+type MessageHandler = (_message: WSMessage) => void;
+type StatusHandler = (_status: 'connecting' | 'connected' | 'disconnected' | 'error') => void;
 
 interface WSChannel {
   type: string;
@@ -51,7 +51,7 @@ export class WebSocketManager {
       this.ws = new WebSocket(url);
 
       this.ws.onopen = () => {
-        console.log('[WS] Connected');
+// [REMOVED] console.log('[WS] Connected');
         this.setStatus('connected');
         this.reconnectAttempts = 0;
         this.startHeartbeat();
@@ -85,8 +85,8 @@ export class WebSocketManager {
         this.setStatus('error');
       };
 
-      this.ws.onclose = (event) => {
-        console.log('[WS] Closed:', event.code, event.reason);
+      this.ws.onclose = (_event) => {
+// [REMOVED] console.log('[WS] Closed:', event.code, event.reason);
         this.setStatus('disconnected');
         this.stopHeartbeat();
         this.scheduleReconnect();
@@ -164,7 +164,7 @@ export class WebSocketManager {
 
   private scheduleReconnect(): void {
     if (this.reconnectAttempts >= API_CONFIG.WS_RECONNECT.maxAttempts) {
-      console.log('[WS] Max reconnect attempts reached');
+// [REMOVED] console.log('[WS] Max reconnect attempts reached');
       return;
     }
 
@@ -173,7 +173,7 @@ export class WebSocketManager {
       API_CONFIG.WS_RECONNECT.maxDelay
     );
 
-    console.log(`[WS] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1})`);
+// [REMOVED] console.log(`[WS] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1})`);
 
     this.reconnectTimer = setTimeout(() => {
       this.reconnectAttempts++;

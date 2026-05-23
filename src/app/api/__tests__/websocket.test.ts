@@ -13,7 +13,7 @@ describe('WebSocket Manager', () => {
   afterEach(() => {
     try {
       wsManager.disconnect();
-    } catch (e) {
+    } catch (_________e) {
       // Ignore disconnect errors
     }
     vi.restoreAllMocks();

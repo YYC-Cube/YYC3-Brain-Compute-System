@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Shield, Users, Key, CheckCircle, XCircle, Eye, Edit3,
-  Plus, Trash2, ChevronDown, UserCog, Lock, Unlock, Settings
+  CheckCircle,
+  Edit3,
+  Key,
+  Settings,
+  Shield,
+  Trash2,
+  UserCog,
+  Users,
+  XCircle
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useState } from 'react';
 import { FuturisticPanel } from '../FuturisticPanel';
 import { useLanguage } from '../LanguageContext';
 
@@ -27,6 +34,12 @@ interface Role {
   userCount: number;
   permissions: string[];
   color: string;
+}
+
+interface PermissionRow {
+  resource: string;
+  resourceEn: string;
+  [key: string]: boolean | string;
 }
 
 const MOCK_USERS: User[] = [
@@ -124,11 +137,10 @@ export function PermissionManager() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-xs transition-all ${
-              activeTab === tab.key
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-xs transition-all ${activeTab === tab.key
                 ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
                 : 'text-gray-400 hover:text-gray-200 border border-transparent'
-            }`}
+              }`}
             style={{ fontSize: '0.75rem' }}
           >
             {tab.icon} {tab.label}
@@ -310,7 +322,7 @@ export function PermissionManager() {
                             {isZh ? row.resource : row.resourceEn}
                           </td>
                           {MOCK_ROLES.map(role => {
-                            const hasPermission = (row as any)[role.id];
+                            const hasPermission = (row as PermissionRow)[role.id] as boolean;
                             return (
                               <td key={role.id} className="py-2.5 px-3 text-center">
                                 {hasPermission ? (

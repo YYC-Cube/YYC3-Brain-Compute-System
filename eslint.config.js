@@ -27,7 +27,7 @@ export default tseslint.config(
       'no-empty': ['error', { allowEmptyCatch: true }],
       'no-useless-escape': 'warn',
 
-      // TypeScript 规则 - Phase 1收紧
+      // Phase 2 (当前): Strict模式 - 分阶段启用
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'warn',
@@ -50,13 +50,13 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/prefer-as-const': 'warn',
+      '@typescript-eslint/strict-boolean-expressions': 'off', // 暂时关闭，待适配后启用
+      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+      '@typescript-eslint/prefer-nullish-coalescing': 'off', // 暂时关闭，待适配后启用
+      '@typescript-eslint/prefer-optional-chain': 'warn',
 
-      // Phase 2 (下个迭代): 更严格 - 暂时注释，待代码适配后启用
+      // Phase 3 (下个迭代): Error级别 - 暂时注释，待代码适配后启用
       // '@typescript-eslint/no-explicit-any': 'error',
-      // '@typescript-eslint/strict-boolean-expressions': 'warn',
-      // '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-      // '@typescript-eslint/prefer-nullish-coalescing': 'error',
-      // '@typescript-eslint/prefer-optional-chain': 'error',
     },
     languageOptions: {
       parserOptions: {

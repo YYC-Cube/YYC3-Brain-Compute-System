@@ -1,5 +1,3 @@
-import React from 'react';
-import { Settings, Save, RefreshCw, Volume2, Monitor, Bell } from 'lucide-react';
 import { FuturisticPanel } from '../FuturisticPanel';
 
 export function SystemSettings() {

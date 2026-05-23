@@ -1,18 +1,38 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Brain, Lightbulb, TrendingUp, AlertTriangle, CheckCircle, XCircle,
-  ChevronRight, BarChart3, Zap, RefreshCw, ThumbsUp, ThumbsDown,
-  Eye, ArrowRight, Clock, Cpu, HardDrive, Network, Shield,
-  Activity, Target, Sparkles, ChevronDown, Play
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  Brain,
+  CheckCircle,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  Eye,
+  Lightbulb,
+  Play,
+  RefreshCw,
+  Shield,
+  Sparkles,
+  Target,
+  TrendingUp,
+  XCircle
 } from 'lucide-react';
-import { FuturisticPanel } from '../FuturisticPanel';
-import { ChartContainer } from '../ChartContainer';
-import { useLanguage } from '../LanguageContext';
+import { AnimatePresence, motion } from 'motion/react';
+import { useCallback, useState } from 'react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
-  BarChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
+  Area,
+  AreaChart,
+  CartesianGrid,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis, Radar,
+  RadarChart,
+  Tooltip as RechartsTooltip,
+  XAxis, YAxis
 } from 'recharts';
+import { ChartContainer } from '../ChartContainer';
+import { FuturisticPanel } from '../FuturisticPanel';
+import { useLanguage } from '../LanguageContext';
 
 // ===== Types =====
 interface AnomalyPattern {
@@ -155,7 +175,7 @@ export function AISuggestionPanel() {
   const { language } = useLanguage();
   const isZh = language === 'zh';
 
-  const [patterns, setPatterns] = useState(ANOMALY_PATTERNS);
+  const [patterns, _setPatterns] = useState(ANOMALY_PATTERNS);
   const [suggestions, setSuggestions] = useState(SUGGESTIONS);
   const [selectedPattern, setSelectedPattern] = useState<string | null>('AP-001');
   const [activeTab, setActiveTab] = useState<'patterns' | 'suggestions' | 'health'>('patterns');
@@ -301,11 +321,10 @@ export function AISuggestionPanel() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md transition-all ${
-              activeTab === tab.id
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md transition-all ${activeTab === tab.id
                 ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
                 : 'text-gray-500 hover:text-gray-300'
-            }`}
+              }`}
             style={{ fontSize: '0.8125rem', fontWeight: activeTab === tab.id ? 600 : 400 }}
           >
             {tab.icon}
@@ -362,11 +381,10 @@ export function AISuggestionPanel() {
                       setSelectedPattern(isSelected ? null : pattern.id);
                       if (!isSelected) setActiveTab('suggestions');
                     }}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                      isSelected
+                    className={`p-4 rounded-xl border cursor-pointer transition-all ${isSelected
                         ? `${sev.bg} ${sev.border} shadow-lg`
                         : 'bg-gray-900/40 border-gray-800 hover:border-gray-700'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -430,13 +448,12 @@ export function AISuggestionPanel() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className={`rounded-xl border transition-all overflow-hidden ${
-                    suggestion.status === 'applied'
+                  className={`rounded-xl border transition-all overflow-hidden ${suggestion.status === 'applied'
                       ? 'bg-green-900/10 border-green-500/20 opacity-70'
                       : suggestion.status === 'dismissed'
-                      ? 'bg-gray-900/20 border-gray-800 opacity-50'
-                      : 'bg-gray-900/40 border-gray-800 hover:border-purple-500/30'
-                  }`}
+                        ? 'bg-gray-900/20 border-gray-800 opacity-50'
+                        : 'bg-gray-900/40 border-gray-800 hover:border-purple-500/30'
+                    }`}
                 >
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3">

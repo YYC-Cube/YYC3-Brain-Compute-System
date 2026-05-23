@@ -6,7 +6,7 @@ import {
   Clock, Shield, Settings, Database, Server, RefreshCw,
   ArrowRight, Eye, BarChart3
 } from 'lucide-react';
-import { FuturisticPanel } from '../FuturisticPanel';
+
 import { useLanguage } from '../LanguageContext';
 
 interface AuditLog {
@@ -163,7 +163,7 @@ export function AuditLogs() {
     critical: MOCK_AUDIT_LOGS.filter(l => l.operationLevel === 'critical').length,
   }), []);
 
-  const operationTypes = useMemo(() => {
+  const _operationTypes = useMemo(() => {
     const types = new Set(MOCK_AUDIT_LOGS.map(l => isZh ? l.operationType : l.operationTypeEn));
     return Array.from(types);
   }, [isZh]);

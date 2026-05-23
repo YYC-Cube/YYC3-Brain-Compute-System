@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Monitor, AlertTriangle, Wrench, FileText, ChevronRight, ChevronDown,
-  Circle, Cpu, MemoryStick, Wifi, RefreshCw, ExternalLink, Search,
+  Circle, RefreshCw, ExternalLink, Search,
   Play, Settings, Eye, Bell, Code, Palette, GitBranch,
 } from 'lucide-react';
 import { FuturisticPanel } from '../FuturisticPanel';

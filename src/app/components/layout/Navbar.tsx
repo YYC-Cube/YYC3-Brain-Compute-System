@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Globe, Search, Bell, Shield, Menu, Wifi, WifiOff, Command, PanelLeftClose, PanelLeft } from 'lucide-react';
+import { Globe, Search, Bell, Shield, Menu, Wifi, WifiOff, Command } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import { API_CONFIG } from '../../api/config';
 

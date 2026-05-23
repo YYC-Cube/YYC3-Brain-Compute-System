@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Mic, MicOff } from 'lucide-react';
 
 interface VoiceInputProps {
-  onVoiceInput: (text: string) => void;
+  onVoiceInput: (_text: string) => void;
   disabled?: boolean;
 }
 

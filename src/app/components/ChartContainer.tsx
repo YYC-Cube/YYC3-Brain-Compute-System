@@ -18,7 +18,7 @@ export function ChartContainer({
   height = 300,
   className = '',
 }: {
-  children: (width: number, height: number) => React.ReactNode;
+  children: (_width: number, _height: number) => React.ReactNode;
   height?: number;
   className?: string;
 }) {
