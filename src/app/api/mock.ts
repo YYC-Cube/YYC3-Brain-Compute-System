@@ -7,15 +7,19 @@
 
 import { API_CONFIG } from './config';
 import type {
+  AIAnalysisResult,
   AlertDetail,
   ApiResponse,
   AuditLog,
+  BatchJob,
   Device,
   FileNode,
   IDENodeStatus,
+  MonitorOverview,
   OperationLog,
   PaginatedResponse,
   PatrolCheck,
+  PatrolReport,
   Role,
   ScriptExecution,
   ScriptTemplate,
@@ -191,7 +195,7 @@ export const mockApi = {
         { name: 'NAS端', cpu: 45, memory: 62, disk: 73, devices: 4 },
         { name: 'ECS端', cpu: 25, memory: 56, disk: 51, devices: 3 },
       ],
-    });
+    } as MonitorOverview);
   },
 
   'GET /monitor/realtime': async () => {
@@ -259,7 +263,7 @@ export const mockApi = {
       { id: 'PC-004', category: '网络', categoryEn: 'Network', name: 'ECS 节点延迟', nameEn: 'ECS node latency', status: 'fail', value: '120ms', threshold: '<100ms', detail: '超过阈值', detailEn: 'Exceeded' },
       { id: 'PC-005', category: '安全', categoryEn: 'Security', name: 'SSL 证书有效期', nameEn: 'SSL cert validity', status: 'warning', value: '30天', threshold: '>60天', detail: '即将过期', detailEn: 'Expiring soon' },
     ];
-    return ok({ id: 'PR-001', timestamp: new Date().toISOString(), type: 'auto', healthScore: 88, totalChecks: 12, passed: 9, warnings: 2, failures: 1, checks });
+    return ok({ id: 'PR-001', timestamp: new Date().toISOString(), type: 'auto', healthScore: 88, totalChecks: 12, passed: 9, warnings: 2, failures: 1, checks } as PatrolReport);
   },
 
   'POST /patrol/run': async () => { await delay(2000); return ok({ taskId: `PATROL-${Date.now()}`, status: 'completed' }); },
@@ -300,7 +304,7 @@ export const mockApi = {
       ],
       overallScore: 79,
       analyzedAt: new Date().toISOString(),
-    });
+    } as AIAnalysisResult);
   },
 
   'POST /ai/analyze': async () => { await delay(2500); return ok({ taskId: `AI-${Date.now()}`, status: 'completed' }); },
@@ -529,7 +533,7 @@ export const mockApi = {
       output: ['Starting execution...', 'Checking nodes...'],
       progress: 30,
       operator: 'admin',
-    });
+    } as ScriptExecution);
   },
 
   'GET /scripts/executions': async () => {
@@ -553,7 +557,7 @@ export const mockApi = {
       status: 'running',
       progress: 0,
       results: [],
-    });
+    } as BatchJob);
   },
 
   // ============================================================

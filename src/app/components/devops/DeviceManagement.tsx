@@ -290,8 +290,8 @@ export function DeviceManagement() {
               key={tab.key}
               onClick={() => { setFilterEndpoint(tab.key); setCurrentPage(1); }}
               className={`px-3 py-1.5 rounded-md text-xs transition-all ${filterEndpoint === tab.key
-                ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
-                : 'text-gray-400 hover:text-gray-200 border border-transparent'
+                  ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
+                  : 'text-gray-400 hover:text-gray-200 border border-transparent'
                 }`}
               style={{ fontSize: '0.75rem' }}
             >
@@ -512,8 +512,8 @@ export function DeviceManagement() {
               key={page}
               onClick={() => setCurrentPage(page)}
               className={`w-8 h-8 rounded-lg text-xs transition-colors ${currentPage === page
-                ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
-                : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white'
+                  ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
+                  : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white'
                 }`}
               style={{ fontSize: '0.75rem' }}
             >
@@ -602,8 +602,8 @@ function DeviceDetailView({
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 rounded-md text-xs whitespace-nowrap transition-all ${activeTab === tab.key
-              ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
-              : 'text-gray-400 hover:text-gray-200 border border-transparent'
+                ? 'bg-cyan-600/30 text-cyan-400 border border-cyan-500/30'
+                : 'text-gray-400 hover:text-gray-200 border border-transparent'
               }`}
             style={{ fontSize: '0.75rem' }}
           >
