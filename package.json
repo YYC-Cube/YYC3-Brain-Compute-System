@@ -53,7 +53,7 @@
     "@radix-ui/react-toggle": "1.1.10",
     "@radix-ui/react-toggle-group": "1.1.11",
     "@radix-ui/react-tooltip": "1.2.8",
-    "@sentry/nextjs": "^10.53.1",
+    "@sentry/nextjs": "^10.55.0",
     "@sentry/react": "^10.53.1",
     "@yyc3/i18n-core": "^2.4.0",
     "class-variance-authority": "0.7.1",
